@@ -16,9 +16,12 @@ import { VerticalForm, FormInput } from "../../components/";
 
 import AuthLayout from "./AuthLayout";
 
-interface UserData {
+interface LoginData {
   username: string;
   loginpassword: string;
+}
+
+interface SignUpData {
   password: string;
   fullname: string;
   email: string;
@@ -65,11 +68,11 @@ const SignInSignUp = () => {
   /*
     handle form submission
     */
-  const onSubmit = (formData: UserData) => {
+  const onSubmit = (formData: LoginData) => {
     dispatch(loginUser(formData["username"], formData["loginpassword"]));
   };
 
-  const onSignUp = (formData: UserData) => {
+  const onSignUp = (formData: SignUpData) => {
     dispatch(
       signupUser(formData["fullname"], formData["email"], formData["password"])
     );
@@ -94,7 +97,7 @@ const SignInSignUp = () => {
                   {error}
                 </Alert>
               )}
-              <VerticalForm<UserData>
+              <VerticalForm<LoginData>
                 onSubmit={onSubmit}
                 resolver={loginSchema}
                 defaultValues={{ username: "test", loginpassword: "test" }}
@@ -150,7 +153,7 @@ const SignInSignUp = () => {
                 )}
               </p>
 
-              <VerticalForm
+              <VerticalForm<SignUpData>
                 onSubmit={onSignUp}
                 resolver={signUpSchema}
                 defaultValues={{}}

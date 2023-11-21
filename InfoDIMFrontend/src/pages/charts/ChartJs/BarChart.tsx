@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { defaults as ChartjsDefaults } from 'chart.js';
 import { Card } from "react-bootstrap";
@@ -55,6 +55,29 @@ const BarChart = () => {
     };
   };
 
+  const [chartData, setChartData] = useState<{
+    labels: string[];
+    datasets: {
+      label: string;
+      backgroundColor: any;
+      borderColor: any;
+      hoverBackgroundColor: any;
+      hoverBorderColor: any;
+      data: number[];
+      barPercentage: number;
+      categoryPercentage: number;
+    }[];
+  }>({
+    labels: [],
+    datasets: [],
+  });
+
+  useEffect(() => {
+    const canvas = document.createElement('canvas');
+    const data = barChartData(canvas);
+    setChartData(data);
+  }, []);
+
   // options
   const barChartOpts = {
     maintainAspectRatio: false,
@@ -96,7 +119,7 @@ const BarChart = () => {
         <h4 className="header-title mb-3">Bar Chart</h4>
 
         <div style={{ height: "320px" }} className="chartjs-chart">
-          <Bar data={barChartData} options={barChartOpts} />
+          <Bar data={chartData} options={barChartOpts} />
         </div>
       </Card.Body>
     </Card>

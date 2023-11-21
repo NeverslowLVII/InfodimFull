@@ -69,12 +69,12 @@ const Typeaheads = () => {
     { id: 3, value: "vanilla", label: "Vanilla" },
   ];
 
-  const onChangeSingleSelection = (selected: OptionTypes[]) => {
-    setSingleSelections(selected);
+  const onChangeSingleSelection = (selected: any[]) => {
+    setSingleSelections(selected as OptionTypes[]);
   };
 
-  const onChangeMultipleSelection = (selected: OptionTypes[]) => {
-    setMultiSelections(selected);
+  const onChangeMultipleSelection = (selected: any[]) => {
+    setMultiSelections(selected as OptionTypes[]);
   };
 
   return (

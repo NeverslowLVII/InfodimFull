@@ -5,6 +5,7 @@
   "dependencies": {
     "@hookform/resolvers": "latest",
     "@restart/ui": "^1.6.6",
+    "@types/mongoose": "^5.11.97",
     "animate.css": "latest",
     "apexcharts": "^3.44.0",
     "axios": "latest",
@@ -21,6 +22,7 @@
     "i18next-browser-languagedetector": "latest",
     "jsvectormap": "latest",
     "jwt-decode": "latest",
+    "mongoose": "^8.0.1",
     "nouislider-react": "latest",
     "react": "latest",
     "react-albus": "^2.0.0",

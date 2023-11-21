@@ -25,6 +25,16 @@ interface UserData {
   email: string;
 }
 
+interface LoginData {
+  username: string;
+  loginpassword: string;
+}
+
+interface SignUpData {
+  password: string;
+  fullname: string;
+  email: string;
+}
 
 /* social links */
 const SocialLinks = () => {
@@ -111,11 +121,11 @@ const SignInSignUp2 = () => {
   /*
     handle form submission
     */
-  const onSubmit = (formData: UserData) => {
+  const onSubmit = (formData: LoginData) => {
     dispatch(loginUser(formData["username"], formData["loginpassword"]));
   };
 
-  const onSignUp = (formData: UserData) => {
+  const onSignUp = (formData: SignUpData) => {
     dispatch(
       signupUser(formData["fullname"], formData["email"], formData["password"])
     );
@@ -154,7 +164,7 @@ const SignInSignUp2 = () => {
                   {error}
                 </Alert>
               )}
-              <VerticalForm<UserData>
+              <VerticalForm<LoginData>
                 onSubmit={onSubmit}
                 resolver={loginSchema}
                 defaultValues={{ username: "test", loginpassword: "test" }}
@@ -206,10 +216,10 @@ const SignInSignUp2 = () => {
             <Tab.Pane eventKey="signup">
               <p className="text-muted mb-3">
                 {t(
-                  "Don't have an account? Create your account, it takes less than a minute"
+                  "Don't have an account? Create your account"
                 )}
               </p>
-              <VerticalForm
+              <VerticalForm<SignUpData>
                 onSubmit={onSignUp}
                 resolver={signUpSchema}
                 defaultValues={{}}

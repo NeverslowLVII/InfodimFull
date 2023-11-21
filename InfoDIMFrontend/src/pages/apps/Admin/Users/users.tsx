@@ -6,6 +6,7 @@ import { fetchUsers, updateUser, addUser, fetchRoles } from './UsersAPI';
 import { User } from './UsersTypes';
 import FormInput from '../../../../components/FormInput';
 import { generateTempPassword } from '../../../../utils/password';
+import { Types } from 'mongoose';
 
 type OptionType = { value: string, label: string };
 type ValueType = OptionType[] | OptionType | null;
@@ -104,7 +105,7 @@ function AdminUserApp() {
                 const matricule = form.elements.namedItem('userMatricule') as HTMLInputElement;
 
                 if (firstName && lastName && matricule && selectedRolesEdit.length > 0) {
-                    const roles = selectedRolesEdit.map(role => role.value);
+                    const roles = selectedRolesEdit.map(role => new Types.ObjectId(role.value));
                     const updatedUser = {
                         ...editForm,
                         firstName: firstName.value,
@@ -202,10 +203,9 @@ function AdminUserApp() {
                                                             placeholder="Rôles de l'utilisateur"
                                                             className="basic-multi-select"
                                                             classNamePrefix="select"
-                                                            onChange={(value: ValueType) => {
-                                                                if (value) {
-                                                                    const newRoles = Array.isArray(value) ? value : [value];
-                                                                    setSelectedRolesEdit(newRoles);                                                                    
+                                                            onChange={(newValue: ReadonlyArray<OptionType>, actionMeta: any) => {
+                                                                if (newValue) {
+                                                                    setSelectedRolesEdit([...newValue]);
                                                                 } else {
                                                                     setSelectedRolesEdit([]);
                                                                 }
@@ -277,10 +277,9 @@ function AdminUserApp() {
                                         placeholder="Rôles de l'utilisateur"
                                         className="basic-multi-select"
                                         classNamePrefix="select"
-                                        onChange={(value: ValueType) => {
-                                            if (value) {
-                                                const newRoles = Array.isArray(value) ? value : [value];
-                                                setSelectedRolesAdd(newRoles);
+                                        onChange={(newValue: ReadonlyArray<OptionType>, actionMeta: any) => {
+                                            if (newValue) {
+                                                setSelectedRolesAdd([...newValue]);
                                             } else {
                                                 setSelectedRolesAdd([]);
                                             }
