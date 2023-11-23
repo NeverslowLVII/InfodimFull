@@ -17,7 +17,7 @@ export const fetchRoutes = async () => {
     }
 };
 
-export const addRoute = async (name: string, position: number, url: string) => {
+export const addRoute = async (name: string, position: number, url: string, updateRoutes: (route: Route) => void) => {
     console.log(`Demande d'ajout de route reçue. Nom: ${name}, Position: ${position}, URL: ${url}`);
     try {
         if (!name || !position || !url) {
@@ -43,6 +43,10 @@ export const addRoute = async (name: string, position: number, url: string) => {
         }
         const data = await response.json();
         console.log(`Réponse reçue du serveur. Données de la nouvelle route: ${JSON.stringify(data)}`);
+        
+        // Update the routes list state
+        await updateRoutes(data);
+
         return data;
     } catch (error) {
         throw new Error(`Erreur lors de l'ajout de la route: ${error}`);
@@ -65,5 +69,21 @@ export const updateRoute = async (route: Route, position: number) => {
         return data;
     } catch (error) {
         throw new Error(`Erreur lors de la mise à jour de la route: ${error}`);
+    }
+};
+
+export const deleteRoute = async (id: string) => {
+    try {
+        const response = await fetch(`http://127.0.0.1:3333/routes/${id}`, {
+            method: 'DELETE',
+        });
+        if (!response.ok) {
+            throw new Error(`Erreur lors de la suppression de la route: ${response.statusText}`);
+        }
+        // Check if the response is empty
+        const text = await response.text();
+        return text ? JSON.parse(text) : {};
+    } catch (error) {
+        throw new Error(`Erreur lors de la suppression de la route: ${error}`);
     }
 };

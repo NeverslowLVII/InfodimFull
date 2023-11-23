@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, FloatingLabel, InputGroup, Row, Col, Card, Button, FormCheck, Form } from 'react-bootstrap';
 import Table from "../../../../components/Table";
-import { fetchRoutes, addRoute, updateRoute } from './RoutesAPI';
+import { fetchRoutes, addRoute, updateRoute, deleteRoute } from './RoutesAPI';
 import { Route } from './RoutesTypes';
+import FeatherIcon from "feather-icons-react";
+import { toast } from 'react-toastify';
 
 function AdminRouteApp() {
     const [showModal, setShowModal] = useState(false);
@@ -20,12 +22,26 @@ function AdminRouteApp() {
         { Header: "Position", accessor: "position", sort: true },
         { Header: "URL", accessor: "url", sort: false },
         { Header: "Visible", accessor: "visible", Cell: ({ value }: { value: boolean }) => value ? 'Oui' : 'Non', sort: true },
-        { Header: "Actions", accessor: "actions", Cell: ({ row }: { row: { original: Route } }) => (<Button onClick={() => openEditForm(row.original)}>Modifier</Button>) },
+        { Header: "Actions", accessor: "actions", Cell: ({ row }: { row: { original: Route } }) => (<FeatherIcon icon="edit" className="icon-dual" onClick={() => openEditForm(row.original)}/>) },
     ];
 
     const openEditForm = (route: Route) => {
         setEditForm(route);
         setShowModal(true);
+    };
+
+    const handleDelete = async () => {
+        if (editForm) {
+            try {
+                await deleteRoute(editForm._id);
+                toast.success('Route supprimée avec succès');
+                setEditForm(null);
+                setShowModal(false);
+                setRoutes(prevRoutes => prevRoutes.filter(route => route._id !== editForm._id));
+            } catch (error) {
+                toast.error(`Erreur lors de la suppression de la route: ${error}`);
+            }
+        }
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -45,6 +61,7 @@ function AdminRouteApp() {
                 };
                 try {
                     await updateRoute(updatedRoute, updatedRoute.position);
+                    toast.success('Onglet mis à jour avec succès');
                     setEditForm(null);
                     setShowModal(false);
                     setRoutes(prevRoutes => {
@@ -57,7 +74,7 @@ function AdminRouteApp() {
                         return prevRoutes;
                     });
                 } catch (error) {
-                    console.error(`Erreur lors de la mise à jour de la route: ${error}`);
+                    toast.error(`Erreur lors de la mise à jour de la route: ${error}`);
                 }
             }
         }
@@ -69,7 +86,7 @@ function AdminRouteApp() {
                 const data = await fetchRoutes();
                 setRoutes(data);
             } catch (error) {
-                console.error(`Erreur lors de la récupération des routes: ${error}`);
+                toast.error(`Erreur lors de la récupération des routes: ${error}`);
             }
         };
         fetchData();
@@ -91,7 +108,7 @@ function AdminRouteApp() {
     ];
 
     function generateSlug(name: string) {
-        return name.toLowerCase().replace(/ /g,'-');
+        return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9-]/g, '-');
     }
 
     function getFirstAvailablePosition(routes: Route[]): number {
@@ -105,6 +122,10 @@ function AdminRouteApp() {
         }
         return position;
     }
+
+    const updateRoutes = (newRoute: Route) => {
+        setRoutes(prevRoutes => [...prevRoutes, newRoute]);
+    };
 
     return (
         <>
@@ -189,6 +210,7 @@ function AdminRouteApp() {
                                                         }}
                                                     />
                                                     <Button type="submit">Mettre à jour</Button>
+                                                    <Button variant="danger" onClick={handleDelete}>Supprimer</Button>
                                                 </Form>
                                             </Modal.Body>
                                         </Modal>
@@ -224,10 +246,10 @@ function AdminRouteApp() {
                                     const routeUrl = '/' + generateSlug(routeName);
 
                                     try {
-                                        const newRoute = await addRoute(routeName, routePosition, routeUrl);
-                                        setRoutes(prevRoutes => [...prevRoutes, newRoute]);
+                                        const newRoute = await addRoute(routeName, routePosition, routeUrl, updateRoutes);
+                                        toast.success('Onglet créé avec succès, rafraichissez la page pour voir les changements');
                                     } catch (error) {
-                                        console.error(`Erreur lors de l'ajout de la route: ${error}`);
+                                        toast.error(`Erreur lors de l'ajout de la route: ${error}`);
                                     }
                                 }
                             }}>

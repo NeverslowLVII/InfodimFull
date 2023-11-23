@@ -52,6 +52,7 @@
     "react-sweetalert2": "latest",
     "react-table": "latest",
     "react-text-mask": "latest",
+    "react-toastify": "^9.1.3",
     "redux-saga": "latest",
     "sass": "latest",
     "simplebar-react": "latest",

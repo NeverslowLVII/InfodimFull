@@ -4,7 +4,6 @@ import AllRoutes from "./routes/Routes";
 
 import { configureFakeBackend } from "./helpers";
 
-
 // For Default import Default.scss
 //import './assets/scss/Default.scss';
 
@@ -23,10 +22,16 @@ import './assets/scss/Modern.scss';
 // For Material demo import Material.scss
 // import './assets/scss/Material.scss';
 
-
 // Other
 import './assets/scss/Landing.scss';
 import "./assets/scss/Icons.scss";
+
+// Import react-toastify CSS
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
+// Import perfect-scrollbar
+import 'react-perfect-scrollbar/dist/css/styles.css';
 
 // configure fake backend
 configureFakeBackend();
@@ -35,7 +40,8 @@ const App = () => {
   return (
     <>
       <React.Fragment>
-        <AllRoutes />
+        <ToastContainer />
+          <AllRoutes />
       </React.Fragment>
     </>
   );
