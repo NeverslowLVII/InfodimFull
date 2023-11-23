@@ -1,6 +1,6 @@
 import { User } from './UsersTypes';
 import { generateTempPassword } from '../../../../utils/password';
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 export const fetchUsers = async () => {
     try {
@@ -18,13 +18,32 @@ export const fetchUsers = async () => {
     }
 };
 
-export const addUser = async (firstName: string, lastName: string, matricule: string, password: string, roles: string[]) => {
+export const fetchUserByMatricule = async (matricule: string) => {
+    // Implement the logic to fetch a user by matricule
+    const users = await fetchUsers();
+    return users.find(user => user.matricule === matricule);
+};
+
+export const addUser = async (firstName: string, lastName: string, matricule: string, password: string, roles: Types.ObjectId[]) => {
+    // Check if a user with the same matricule already exists
+    const existingUser = await fetchUserByMatricule(matricule);
+    if (existingUser) {
+        console.error('A user with the same matricule already exists');
+        return;
+    }
+
+    console.log('firstName:', firstName);
+    console.log('lastName:', lastName);
+    console.log('matricule:', matricule);
+    console.log('password:', password);
+    console.log('roles:', roles);
+
     const user: User = {
         _id: new mongoose.Types.ObjectId(),
         firstName: firstName,
         lastName: lastName,
         matricule: matricule,
-        roles: roles.map(role => new mongoose.Types.ObjectId(role)),
+        roles: roles,
         password: generateTempPassword(),
         createdAt: new Date(),
         deletedAt: null,

@@ -6,7 +6,7 @@ import { fetchUsers, updateUser, addUser, fetchRoles } from './UsersAPI';
 import { User } from './UsersTypes';
 import FormInput from '../../../../components/FormInput';
 import { generateTempPassword } from '../../../../utils/password';
-import { Types } from 'mongoose';
+import mongoose from 'mongoose';
 
 type OptionType = { value: string, label: string };
 type ValueType = OptionType[] | OptionType | null;
@@ -52,7 +52,6 @@ function AdminUserApp() {
     }, []);
 
     useEffect(() => {
-        //console.log(selectedRolesEdit);
     }, [selectedRolesEdit]);
 
     const userColumns = [
@@ -105,7 +104,14 @@ function AdminUserApp() {
                 const matricule = form.elements.namedItem('userMatricule') as HTMLInputElement;
 
                 if (firstName && lastName && matricule && selectedRolesEdit.length > 0) {
-                    const roles = selectedRolesEdit.map(role => new Types.ObjectId(role.value));
+                    const roles = (selectedRolesEdit.map(role => {
+                        if (/^[0-9a-fA-F]{24}$/.test(role.value)) {
+                            return new mongoose.Types.ObjectId(role.value);
+                        } else {
+                            console.error(`Invalid ObjectId: ${role.value}`);
+                            return null;
+                        }
+                    }).filter(role => role !== null) as mongoose.Types.ObjectId[]);
                     const updatedUser = {
                         ...editForm,
                         firstName: firstName.value,
@@ -248,7 +254,24 @@ function AdminUserApp() {
                                     const lastName = lastNameElement.value;
                                     const matricule = matriculeElement.value;
                                     const password = passwordElement.value;
-                                    const roles = selectedRolesAdd.map(role => role.value);
+                                    const roles = (selectedRolesAdd.map(role => {
+                                        if (/^[0-9a-fA-F]{24}$/.test(role.value)) {
+                                            return new mongoose.Types.ObjectId(role.value);
+                                        } else {
+                                            console.error(`Invalid ObjectId: ${role.value}`);
+                                            return null;
+                                        }
+                                    }).filter(role => role !== null) as mongoose.Types.ObjectId[]);
+
+                                    // Log data before adding user
+                                    console.log('Data before adding user:', {
+                                        firstName,
+                                        lastName,
+                                        matricule,
+                                        password,
+                                        roles
+                                    });
+
                                     addUser(firstName, lastName, matricule, password, roles)
                                         .then(newUser => setUsers(prevUsers => [...prevUsers, newUser]))
                                         .catch(error => console.error(error));
