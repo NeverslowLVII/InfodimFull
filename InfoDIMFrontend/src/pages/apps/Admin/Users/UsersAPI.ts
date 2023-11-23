@@ -51,6 +51,8 @@ export const addUser = async (firstName: string, lastName: string, matricule: st
         __v: 0,
     };
 
+    console.log('Data before adding user:', user);
+
     return fetch('http://127.0.0.1:3333/users', {
         method: 'POST',
         headers: {

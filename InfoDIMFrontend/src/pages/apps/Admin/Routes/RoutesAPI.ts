@@ -17,31 +17,32 @@ export const fetchRoutes = async () => {
     }
 };
 
-export const addRoute = async (name: string, position: number, url: string, file: File) => {
+export const addRoute = async (name: string, position: number, url: string) => {
+    console.log(`Demande d'ajout de route reçue. Nom: ${name}, Position: ${position}, URL: ${url}`);
     try {
-        const route: Partial<Route> = {
-            __v: 0,
-            url,
-            position,
-            visible: true,
-            name,
-            createdAt: new Date(),
-            deletedAt: null,
-            updatedAt: new Date()
-        };
+        if (!name || !position || !url) {
+            throw new Error("Tous les champs sont requis");
+        }
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('route', JSON.stringify(route));
+        const routeData = {
+            name,
+            position,
+            url,
+            visible: true
+        };
 
         const response = await fetch('http://127.0.0.1:3333/routes', {
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(routeData),
         });
         if (!response.ok) {
             throw new Error(`Erreur lors de l'ajout de la route: ${response.statusText}`);
         }
         const data = await response.json();
+        console.log(`Réponse reçue du serveur. Données de la nouvelle route: ${JSON.stringify(data)}`);
         return data;
     } catch (error) {
         throw new Error(`Erreur lors de l'ajout de la route: ${error}`);

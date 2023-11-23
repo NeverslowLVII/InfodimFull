@@ -156,7 +156,7 @@ function AdminUserApp() {
             value: 25,
         },
         {
-            text: "All",
+            text: "Tous",
             value: users.length,
         },
     ];
@@ -249,7 +249,7 @@ function AdminUserApp() {
                                 const matriculeElement = target.elements.namedItem('userMatricule') as HTMLInputElement;
                                 const passwordElement = target.elements.namedItem('userPassword') as HTMLInputElement;
 
-                                if (firstNameElement && lastNameElement && matriculeElement && passwordElement && selectedRolesAdd.length > 0) {
+                                if (firstNameElement && lastNameElement && matriculeElement && matriculeElement.value && passwordElement && selectedRolesAdd.length > 0) {
                                     const firstName = firstNameElement.value;
                                     const lastName = lastNameElement.value;
                                     const matricule = matriculeElement.value;
@@ -276,7 +276,7 @@ function AdminUserApp() {
                                         .then(newUser => setUsers(prevUsers => [...prevUsers, newUser]))
                                         .catch(error => console.error(error));
                                 } else {
-                                    console.log("Veuillez remplir tous les champs et sélectionner au moins un rôle.");
+                                    console.log("Veuillez remplir tous les champs, fournir un matricule et sélectionner au moins un rôle.");
                                 }
                                 setValidatedAddForm(true);
                             }}>

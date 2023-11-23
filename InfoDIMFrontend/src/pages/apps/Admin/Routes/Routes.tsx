@@ -1,46 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, FloatingLabel, InputGroup, Row, Col, Card, Button, FormCheck, Form } from 'react-bootstrap';
 import Table from "../../../../components/Table";
-import { FormInput } from "../../../../components/";
 import { fetchRoutes, addRoute, updateRoute } from './RoutesAPI';
 import { Route } from './RoutesTypes';
 
 function AdminRouteApp() {
-
     const [showModal, setShowModal] = useState(false);
+    const [editForm, setEditForm] = useState<Route | null>(null);
+    const [routes, setRoutes] = useState<Route[]>([]);
+    const [status, setStatus] = useState({
+        activeRoutes: true,
+        deletedRoutes: false,
+    });
+    const [defaultPosition, setDefaultPosition] = useState(1);
+    const [routePosition, setRoutePosition] = useState(defaultPosition);
 
     const columns = [
-        {
-            Header: "Nom",
-            accessor: "name",
-            sort: true,
-        },
-        {
-            Header: "Position",
-            accessor: "position",
-            sort: true,
-        },
-        {
-            Header: "URL",
-            accessor: "url",
-            sort: false,
-        },
-        {
-            Header: "Visible",
-            accessor: "visible",
-            Cell: ({ value }: { value: boolean }) => value ? 'Oui' : 'Non',
-            sort: true,
-        },
-        {
-            Header: "Actions",
-            accessor: "actions",
-            Cell: ({ row }: { row: { original: Route } }) => (
-                <Button onClick={() => openEditForm(row.original)}>Modifier</Button>
-            ),
-        },
+        { Header: "Nom", accessor: "name", sort: true },
+        { Header: "Position", accessor: "position", sort: true },
+        { Header: "URL", accessor: "url", sort: false },
+        { Header: "Visible", accessor: "visible", Cell: ({ value }: { value: boolean }) => value ? 'Oui' : 'Non', sort: true },
+        { Header: "Actions", accessor: "actions", Cell: ({ row }: { row: { original: Route } }) => (<Button onClick={() => openEditForm(row.original)}>Modifier</Button>) },
     ];
-
-    const [editForm, setEditForm] = useState<Route | null>(null);
 
     const openEditForm = (route: Route) => {
         setEditForm(route);
@@ -53,7 +34,7 @@ function AdminRouteApp() {
             const form = event.target as HTMLFormElement;
             const name = form.elements.namedItem('routeName') as HTMLInputElement;
             const position = form.elements.namedItem('routePosition') as HTMLInputElement;
-            const url = form.elements.namedItem('routeUrl') as HTMLInputElement; // Change 'routePath' to 'routeUrl'
+            const url = form.elements.namedItem('routeUrl') as HTMLInputElement;
     
             if (name && position && url) {
                 const updatedRoute = {
@@ -82,12 +63,6 @@ function AdminRouteApp() {
         }
     };
 
-    const [routes, setRoutes] = useState<Route[]>([]);
-    const [status, setStatus] = useState({
-        activeRoutes: true,
-        deletedRoutes: false,
-    });
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -100,24 +75,36 @@ function AdminRouteApp() {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        setDefaultPosition(getFirstAvailablePosition(routes));
+    }, [routes]);
+
+    useEffect(() => {
+        setRoutePosition(defaultPosition);
+    }, [defaultPosition]);
+
     const sizePerPageList = [
-        {
-            text: "5",
-            value: 5,
-        },
-        {
-            text: "10",
-            value: 10,
-        },
-        {
-            text: "25",
-            value: 25,
-        },
-        {
-            text: "All",
-            value: routes.length,
-        },
+        { text: "5", value: 5 },
+        { text: "10", value: 10 },
+        { text: "25", value: 25 },
+        { text: "Tous", value: routes.length },
     ];
+
+    function generateSlug(name: string) {
+        return name.toLowerCase().replace(/ /g,'-');
+    }
+
+    function getFirstAvailablePosition(routes: Route[]): number {
+        const positions = routes.map(route => route.position).sort((a, b) => Number(a) - Number(b));
+        let position = 1;
+        for (let i = 0; i < positions.length; i++) {
+            if (positions[i] !== position) {
+                break;
+            }
+            position++;
+        }
+        return position;
+    }
 
     return (
         <>
@@ -126,7 +113,6 @@ function AdminRouteApp() {
                     <div className="page-title-box">
                         <div className="page-title-right">
                             <form className="d-flex align-items-center mb-3">
-                                {/* <div className="input-group input-group-sm"> */}
                                     <Row>
                                         <Col>
                                             <FormCheck
@@ -149,8 +135,6 @@ function AdminRouteApp() {
                                             />
                                         </Col>
                                     </Row>
-
-                                {/* </div> */}
                                 <Button
                                     onClick={() =>
                                         setStatus({
@@ -210,6 +194,7 @@ function AdminRouteApp() {
                                         </Modal>
                                     )}
                                     <Table
+                                        key={routes.length}
                                         columns={columns}
                                         data={routes.filter(route => (status.activeRoutes && route.visible) || (status.deletedRoutes && !route.visible))}
                                         pageSize={5}
@@ -232,26 +217,30 @@ function AdminRouteApp() {
                                 const target = event.target as HTMLFormElement;
                                 const routeNameElement = target.elements.namedItem('routeName') as HTMLInputElement;
                                 const routePositionElement = target.elements.namedItem('routePosition') as HTMLInputElement;
-                                const routeUrlElement = target.elements.namedItem('routeUrl') as HTMLInputElement;
 
-                                if (routeNameElement && routePositionElement && routeUrlElement) {
+                                if (routeNameElement && routePositionElement) {
                                     const routeName = routeNameElement.value;
                                     const routePosition = parseInt(routePositionElement.value, 10);
-                                    const routeUrl = '/' + routeUrlElement.value;
+                                    const routeUrl = '/' + generateSlug(routeName);
+
+                                    try {
+                                        const newRoute = await addRoute(routeName, routePosition, routeUrl);
+                                        setRoutes(prevRoutes => [...prevRoutes, newRoute]);
+                                    } catch (error) {
+                                        console.error(`Erreur lors de l'ajout de la route: ${error}`);
+                                    }
                                 }
                             }}>
                                 <FloatingLabel controlId="floatingRouteName" label="Nom de la route" className="mb-3">
                                     <Form.Control name="routeName" type="text" />
                                 </FloatingLabel>
                                 <FloatingLabel controlId="floatingRoutePosition" label="Position de la route" className="mb-3">
-                                    <Form.Control name="routePosition" type="number" />
-                                </FloatingLabel>
-                                <p>Chemin de la route</p>
-                                <FloatingLabel controlId="floatingRouteUrl" label="" className="mb-3">
-                                    <InputGroup>
-                                        <InputGroup.Text>/</InputGroup.Text>
-                                        <Form.Control name="routeUrl" type="text" placeholder='' />
-                                    </InputGroup>
+                                    <Form.Control 
+                                        name="routePosition" 
+                                        type="number" 
+                                        value={routePosition} 
+                                        onChange={(e) => setRoutePosition(Number(e.target.value))}
+                                    />
                                 </FloatingLabel>
                                 <Button type="submit">Ajouter une route</Button>
                             </Form>

@@ -4,7 +4,9 @@ import { Route } from '../models/Routes';
 export default {
   createRoute: async (req: Request, res: Response) => {
     const route = new Route(req.body);
+    console.log('Nouvelle instance de Route créée avec les données reçues:', route);
     await route.save();
+    console.log('Instance de Route sauvegardée dans la base de données:', route);
     res.status(201).json({ message: 'Route créée avec succès', route });
   },
   getRoutes: async (req: Request, res: Response) => {
