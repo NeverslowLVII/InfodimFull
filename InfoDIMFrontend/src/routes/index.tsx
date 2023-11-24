@@ -142,7 +142,7 @@ const adminAppRoutes: RoutesProps = {
 };
 
 const adminUserAppRoutes: RoutesProps = {
-  path: "/apps/admin/users",
+  path: "/apps/admin/utilisateurs",
   name: "Users",
   route: PrivateRoute,
   roles: ["Admin"],

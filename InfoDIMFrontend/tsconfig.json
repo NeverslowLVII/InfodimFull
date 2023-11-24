@@ -20,7 +20,9 @@
     "noEmit": true,
     "jsx": "react",
     "paths": {
-      "mongoose": ["node_modules/mongoose"]
+      "@/*": [
+        "src/*"
+      ]
     }
   },
   "include": [

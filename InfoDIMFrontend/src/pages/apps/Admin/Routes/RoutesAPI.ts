@@ -28,7 +28,7 @@ export const addRoute = async (name: string, position: number, url: string, upda
             name,
             position,
             url,
-            visible: true
+            visible: false
         };
 
         const response = await fetch('http://127.0.0.1:3333/routes', {

@@ -30,9 +30,6 @@ import "./assets/scss/Icons.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
-// Import perfect-scrollbar
-import 'react-perfect-scrollbar/dist/css/styles.css';
-
 // configure fake backend
 configureFakeBackend();
 

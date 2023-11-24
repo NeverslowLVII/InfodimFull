@@ -77,8 +77,8 @@ function AdminUserApp() {
             sort: true,
         },
         {
-            Header: "Actions",
-            accessor: "actions",
+            Header: "Modifier",
+            accessor: "modifier",
             Cell: ({ row }: { row: { original: User } }) => (
                 <Button onClick={() => openEditForm(row.original)}>Modifier</Button>
             ),

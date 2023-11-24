@@ -10,7 +10,7 @@ import {
 } from "react-table";
 import classNames from "classnames";
 
-// components
+// composants
 import Pagination from "./Pagination";
 
 interface GlobalFilterProps {
@@ -20,7 +20,7 @@ interface GlobalFilterProps {
   searchBoxClass: any;
 }
 
-// Define a default UI for filtering
+// Définir une interface utilisateur par défaut pour le filtrage
 const GlobalFilter = ({
   preGlobalFilteredRows,
   globalFilter,
@@ -36,7 +36,6 @@ const GlobalFilter = ({
   return (
     <div className={classNames(searchBoxClass)}>
       <span className="d-flex align-items-center">
-        Search :{" "}
         <input
           type="search"
           value={value || ""}
@@ -44,7 +43,7 @@ const GlobalFilter = ({
             setValue(e.target.value);
             onChange(e.target.value);
           }}
-          placeholder={`${count} records...`}
+          placeholder={`Recherche...`}
           className="form-control w-auto ms-1"
         />
       </span>
@@ -137,7 +136,7 @@ const Table = (props: TableProps) => {
     {
       columns: props["columns"],
       data: props["data"],
-      initialState: { pageSize: props["pageSize"] || 10 },
+      initialState: { pageSize: props.pageSize || 5 },
     },
     otherProps.hasOwnProperty("useGlobalFilter") &&
       otherProps["useGlobalFilter"],
@@ -148,11 +147,11 @@ const Table = (props: TableProps) => {
     (hooks) => {
       isSelectable &&
         hooks.visibleColumns.push((columns: any) => [
-          // Let's make a column for selection
+          // Faisons une colonne pour la sélection
           {
             id: "selection",
-            // The header can use the table's getToggleAllRowsSelectedProps method
-            // to render a checkbox
+            // L'en-tête peut utiliser la méthode getToggleAllRowsSelectedProps de la table
+            // pour rendre une case à cocher
             Header: ({ getToggleAllPageRowsSelectedProps }: any) => (
               <div>
                 <IndeterminateCheckbox
@@ -160,8 +159,8 @@ const Table = (props: TableProps) => {
                 />
               </div>
             ),
-            // The cell can use the individual row's getToggleRowSelectedProps method
-            // to the render a checkbox
+            // La cellule peut utiliser la méthode getToggleRowSelectedProps de la ligne individuelle
+            // pour rendre une case à cocher
             Cell: ({ row }: any) => (
               <div>
                 <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
@@ -173,10 +172,10 @@ const Table = (props: TableProps) => {
 
       isExpandable &&
         hooks.visibleColumns.push((columns: any) => [
-          // Let's make a column for selection
+          // Faisons une colonne pour la sélection
           {
-            // Build our expander column
-            id: "expander", // Make sure it has an ID
+            // Construisons notre colonne d'expansion
+            id: "expander", // Assurez-vous qu'il a un ID
             Header: ({
               getToggleAllRowsExpandedProps,
               isAllRowsExpanded,
@@ -186,15 +185,15 @@ const Table = (props: TableProps) => {
               </span>
             ),
             Cell: ({ row }) =>
-              // Use the row.canExpand and row.getToggleRowExpandedProps prop getter
-              // to build the toggle for expanding a row
+              // Utilisez le prop getter row.canExpand et row.getToggleRowExpandedProps
+              // pour construire le bascule pour l'expansion d'une ligne
               row.canExpand ? (
                 <span
                   {...row.getToggleRowExpandedProps({
                     style: {
-                      // We can even use the row.depth property
-                      // and paddingLeft to indicate the depth
-                      // of the row
+                      // Nous pouvons même utiliser la propriété row.depth
+                      // et paddingLeft pour indiquer la profondeur
+                      // de la ligne
                       paddingLeft: `${row.depth * 2}rem`,
                     },
                   })}
@@ -244,6 +243,16 @@ const Table = (props: TableProps) => {
                     })}
                   >
                     {column.render("Header")}
+                    {/* Ajoutez les icônes de flèche ici */}
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <span>&darr;</span>
+                      ) : (
+                        <span>&uarr;</span>
+                      )
+                    ) : (
+                      ""
+                    )}
                   </th>
                 ))}
               </tr>
@@ -260,6 +269,7 @@ const Table = (props: TableProps) => {
                         {...cell.getCellProps([
                           {
                             className: cell.column.className,
+                            style: { width: cell.column.width },
                           },
                         ])}
                       >
