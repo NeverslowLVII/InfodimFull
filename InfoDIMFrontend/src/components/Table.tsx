@@ -235,6 +235,8 @@ const Table = (props: TableProps) => {
                   <th
                     {...column.getHeaderProps(
                       column.sort && column.getSortByToggleProps()
+                      //textalign center
+                      
                     )}
                     className={classNames({
                       sorting_desc: column.isSortedDesc === true,
@@ -243,7 +245,6 @@ const Table = (props: TableProps) => {
                     })}
                   >
                     {column.render("Header")}
-                    {/* Ajoutez les icônes de flèche ici */}
                     {column.isSorted ? (
                       column.isSortedDesc ? (
                         <span>&darr;</span>
@@ -251,7 +252,7 @@ const Table = (props: TableProps) => {
                         <span>&uarr;</span>
                       )
                     ) : (
-                      ""
+                      <span>&nbsp;&nbsp;</span>
                     )}
                   </th>
                 ))}
@@ -269,7 +270,7 @@ const Table = (props: TableProps) => {
                         {...cell.getCellProps([
                           {
                             className: cell.column.className,
-                            style: { width: cell.column.width },
+                            style: { width: cell.column.width, textAlign: cell.column.textAlign },
                           },
                         ])}
                       >

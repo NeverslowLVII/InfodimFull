@@ -31,13 +31,20 @@ function AdminRouteApp() {
   const columns = [
     { Header: "Nom", accessor: "name", sort: true, width: "35%" },
     { Header: "URL", accessor: "url", sort: false, width: "35%" },
-    { Header: "Position", accessor: "position", sort: true, width: "10%" },
+    {
+      Header: "Position",
+      accessor: "position",
+      sort: true,
+      width: "10%",
+      textAlign: "center",
+    },
     {
       Header: "Visible",
       accessor: "visible",
       Cell: ({ value }: { value: boolean }) => (value ? "Oui" : "Non"),
       sort: true,
       width: "10%",
+      textAlign: "center",
     },
     {
       Header: "Modifier",
@@ -50,6 +57,7 @@ function AdminRouteApp() {
         />
       ),
       width: "10%",
+      textAlign: "center",
     },
   ];
 
@@ -91,7 +99,12 @@ function AdminRouteApp() {
           position: Number(position.value),
           url: "/" + url.value,
         };
-        await handlePositionConflict(updatedRoute.position, updatedRoute);
+
+        if (isDuplicateRoute(updatedRoute)) {
+          toast.error("Un onglet avec le même nom, URL ou position existe déjà.");
+          return;
+        }
+
         try {
           await updateRoute(updatedRoute, updatedRoute.position);
           toast.success("Onglet mis à jour avec succès");
@@ -115,27 +128,44 @@ function AdminRouteApp() {
     }
   };
 
-  const handlePositionConflict = async (
-    desiredPosition: number,
-    newRoute: Route
-  ) => {
-    const conflictingRoute = routes.find(
-      (route) => route.position === desiredPosition
-    );
+  const handleUpdate = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (editForm) {
+      const form = event.target as HTMLFormElement;
+      const name = form.elements.namedItem("routeName") as HTMLInputElement;
+      const position = form.elements.namedItem(
+        "routePosition"
+      ) as HTMLInputElement;
+      const url = form.elements.namedItem("routeUrl") as HTMLInputElement;
 
-    if (conflictingRoute) {
-      const confirmation = window.confirm(
-        "La position est déjà prise. Voulez-vous remplacer la position ?"
-      );
-      if (confirmation) {
-        conflictingRoute.position += 1;
-        await updateRoute(conflictingRoute, conflictingRoute.position);
-        await handlePositionConflict(desiredPosition, newRoute);
+      if (name && position && url) {
+        const updatedRoute = {
+          ...editForm,
+          name: name.value,
+          position: Number(position.value),
+          url: "/" + url.value,
+        };
+
+        if (isDuplicateRoute(updatedRoute)) {
+          toast.error("Un onglet avec le même nom, URL ou position existe déjà.");
+          return;
+        }
       }
-    } else {
-      newRoute.position = desiredPosition;
-      await updateRoute(newRoute, newRoute.position);
     }
+  };
+
+  const isDuplicateRoute = (newRoute: Route) => {
+    return routes.some(
+      (route) => route.name === newRoute.name || route.url === newRoute.url || route.position === newRoute.position
+    );
+  };
+
+  const isDuplicateRouteName = (name: string) => {
+    return routes.some((route) => route.name === name);
+  };
+
+  const isDuplicateRoutePosition = (position: number) => {
+    return routes.some((route) => route.position === position);
   };
 
   useEffect(() => {
@@ -366,8 +396,18 @@ function AdminRouteApp() {
                     );
                     const routeUrl = "/" + generateSlug(routeName);
 
+                    if (isDuplicateRouteName(routeName)) {
+                      toast.error("Une route avec le même nom existe déjà.");
+                      return;
+                    }
+
+                    if (isDuplicateRoutePosition(routePosition)) {
+                      toast.error("Une route avec la même position existe déjà.");
+                      return;
+                    }
+
                     try {
-                      const newRoute = await addRoute(
+                      await addRoute(
                         routeName,
                         routePosition,
                         routeUrl,
