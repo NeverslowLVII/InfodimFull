@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+export type OptionType = { value: string; label: string };
+
 export interface User {
     _id: mongoose.Types.ObjectId;
     firstName: string;

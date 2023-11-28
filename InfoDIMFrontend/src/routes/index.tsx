@@ -32,7 +32,7 @@ const Landing = React.lazy(() => import("../pages/landing/"));
 
 // apps
 const AdminRouteApp = React.lazy(() => import("../pages/apps/Admin/Routes/Routes"));
-const AdminUserApp = React.lazy(() => import("../pages/apps/Admin/Users/users"));
+const AdminUserApp = React.lazy(() => import("../pages/apps/Admin/Users/index"));
 
 // extra pages
 const Starter = React.lazy(() => import("../pages/other/Starter"));

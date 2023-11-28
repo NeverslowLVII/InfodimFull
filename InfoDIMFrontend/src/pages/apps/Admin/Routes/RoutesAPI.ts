@@ -18,9 +18,9 @@ export const fetchRoutes = async () => {
 };
 
 export const addRoute = async (name: string, position: number, url: string, updateRoutes: (route: Route) => void) => {
-    console.log(`Demande d'ajout de route reçue. Nom: ${name}, Position: ${position}, URL: ${url}`);
+    console.log(`Demande d'ajout de route reçue. Nom: ${name}, Position: ${position}`);
     try {
-        if (!name || !position || !url) {
+        if (!name || !position) {
             throw new Error("Tous les champs sont requis");
         }
 

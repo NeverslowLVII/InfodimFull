@@ -4,6 +4,11 @@ import mongoose from 'mongoose';
 
 export default {
   createUser: async (req: Request, res: Response) => {
+    if (req.body.roles) {
+      req.body.roles = req.body.roles.filter((role: string) => 
+        mongoose.Types.ObjectId.isValid(role)
+      ).map((role: string) => new mongoose.Types.ObjectId(role));
+    }
     const user = new User(req.body);
     await user.save();
     res.status(201).json(user);

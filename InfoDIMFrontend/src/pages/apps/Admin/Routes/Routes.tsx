@@ -27,6 +27,7 @@ function AdminRouteApp() {
   const [defaultPosition, setDefaultPosition] = useState(1);
   const [routePosition, setRoutePosition] = useState(defaultPosition);
   const [pageSize, setPageSize] = useState(5);
+  const [showAllRoutes, setShowAllRoutes] = useState(false);
 
   const columns = [
     { Header: "Nom", accessor: "name", sort: true, width: "35%" },
@@ -100,8 +101,24 @@ function AdminRouteApp() {
           url: "/" + url.value,
         };
 
-        if (isDuplicateRoute(updatedRoute)) {
-          toast.error("Un onglet avec le même nom, URL ou position existe déjà.");
+        if (isDuplicateRoute('position', Number(position.value), editForm._id)) {
+          toast.error(
+            "Une route avec la même position existe déjà."
+          );
+          return;
+        }
+
+        if (isDuplicateRoute('url', url.value, editForm._id)) {
+          toast.error(
+            "Une route avec la même URL existe déjà."
+          );
+          return;
+        }
+
+        if (isDuplicateRoute('name', name.value, editForm._id)) {
+          toast.error(
+            "Une route avec le même nom existe déjà."
+          );
           return;
         }
 
@@ -146,26 +163,32 @@ function AdminRouteApp() {
           url: "/" + url.value,
         };
 
-        if (isDuplicateRoute(updatedRoute)) {
-          toast.error("Un onglet avec le même nom, URL ou position existe déjà.");
+        if (isDuplicateRoute('position', Number(position.value), editForm._id)) {
+          toast.error(
+            "Une route avec la même position existe déjà."
+          );
+          return;
+        }
+
+        if (isDuplicateRoute('url', url.value, editForm._id)) {
+          toast.error(
+            "Une route avec la même URL existe déjà."
+          );
+          return;
+        }
+
+        if (isDuplicateRoute('name', name.value, editForm._id)) {
+          toast.error(
+            "Une route avec le même nom existe déjà."
+          );
           return;
         }
       }
     }
   };
 
-  const isDuplicateRoute = (newRoute: Route) => {
-    return routes.some(
-      (route) => route.name === newRoute.name || route.url === newRoute.url || route.position === newRoute.position
-    );
-  };
-
-  const isDuplicateRouteName = (name: string) => {
-    return routes.some((route) => route.name === name);
-  };
-
-  const isDuplicateRoutePosition = (position: number) => {
-    return routes.some((route) => route.position === position);
+  const isDuplicateRoute = (field: keyof Route, value: string | number, id?: string) => {
+    return routes.some((route) => route[field] === value && (!id || route._id !== id));
   };
 
   useEffect(() => {
@@ -237,7 +260,7 @@ function AdminRouteApp() {
       </Row>
 
       <Row>
-        <Col className="col-8">
+        <Col xs={12} md={8}>
           <Card>
             <Card.Body>
               <Row>
@@ -273,15 +296,25 @@ function AdminRouteApp() {
                   />
                 </Col>
                 <Button
+                  style={{ marginBottom: "1rem" }}
                   onClick={() => {
-                    setStatus({
-                      activeRoutes: true,
-                      deletedRoutes: true,
-                    });
-                    setPageSize(routes.length);
+                    if (showAllRoutes) {
+                      setStatus({
+                        activeRoutes: false,
+                        deletedRoutes: false,
+                      });
+                      setPageSize(5);
+                    } else {
+                      setStatus({
+                        activeRoutes: true,
+                        deletedRoutes: true,
+                      });
+                      setPageSize(routes.length);
+                    }
+                    setShowAllRoutes(!showAllRoutes);
                   }}
                 >
-                  Tout Afficher
+                  {showAllRoutes ? "Tout Masquer" : "Tout Afficher"}
                 </Button>
               </Row>
               <Row>
@@ -345,9 +378,15 @@ function AdminRouteApp() {
                               });
                             }}
                           />
-                          <Button type="submit">Mettre à jour</Button>
-                          <Button variant="danger" onClick={handleDelete}>
-                            Supprimer
+                          <Button type="submit" style={{ marginRight: "1rem" }}>
+                            Mettre à jour
+                          </Button>
+                          <Button
+                            variant="danger"
+                            onClick={handleDelete}
+                            style={{ marginRight: "1rem" }}
+                          >
+                            Supprimer Définitivement
                           </Button>
                         </Form>
                       </Modal.Body>
@@ -361,7 +400,7 @@ function AdminRouteApp() {
                         (status.activeRoutes && route.visible) ||
                         (status.deletedRoutes && !route.visible)
                     )}
-                    pageSize={pageSize} // Pass pageSize as a prop
+                    pageSize={pageSize}
                     sizePerPageList={sizePerPageList}
                     isSortable={true}
                     pagination={true}
@@ -372,7 +411,7 @@ function AdminRouteApp() {
             </Card.Body>
           </Card>
         </Col>
-        <Col>
+        <Col xs={12} md={4}>
           <Card>
             <Card.Body>
               <h4>Ajout d'Onglets</h4>
@@ -396,13 +435,15 @@ function AdminRouteApp() {
                     );
                     const routeUrl = "/" + generateSlug(routeName);
 
-                    if (isDuplicateRouteName(routeName)) {
+                    if (isDuplicateRoute('name', routeName)) {
                       toast.error("Une route avec le même nom existe déjà.");
                       return;
                     }
 
-                    if (isDuplicateRoutePosition(routePosition)) {
-                      toast.error("Une route avec la même position existe déjà.");
+                    if (isDuplicateRoute('position', routePosition)) {
+                      toast.error(
+                        "Une route avec la même position existe déjà."
+                      );
                       return;
                     }
 
@@ -418,7 +459,7 @@ function AdminRouteApp() {
                       );
                     } catch (error) {
                       toast.error(
-                        `Erreur lors de l'ajout de la route: ${error}`
+                        `${error}`
                       );
                     }
                   }

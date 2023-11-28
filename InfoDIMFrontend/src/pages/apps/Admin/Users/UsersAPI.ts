@@ -82,21 +82,18 @@ export const updateUser = (user: User) => {
         });
 };
 
-export const deleteUser = (user: User) => {
-    console.log('Suppression de l\'utilisateur:', user);
-    return fetch('http://127.0.0.1:3333/users/' + user._id, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ ...user, visible: false }),
-    })
-        .then(response => response.json())
-        .catch(error => {
-            console.error('Erreur lors de la suppression de l\'utilisateur:', error);
-            throw error;
-        });
-};
+export async function deleteUser(userId: string) {
+    const response = await fetch('http://localhost:3333/users/' + userId, {
+        method: 'DELETE',
+    });
+    if (!response.ok) {
+        throw new Error(`Erreur lors de la suppression de l'utilisateur: ${response.statusText}`);
+    }
+    const text = await response.text();
+    if (text) {
+        throw new Error(`Erreur lors de la suppression de l'utilisateur: ${text}`);
+    }
+}
 
 export const fetchRoles = async () => {
     try {

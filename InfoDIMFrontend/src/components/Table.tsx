@@ -104,6 +104,7 @@ interface TableProps {
   searchBoxClass?: string;
   tableClass?: string;
   theadClass?: string;
+  setPageSize?: any; // Add this line
 }
 
 const Table = (props: TableProps) => {
@@ -208,6 +209,10 @@ const Table = (props: TableProps) => {
   );
 
   let rows = pagination ? dataTable.page : dataTable.rows;
+
+  useEffect(() => {
+    dataTable.setPageSize(props.pageSize);
+  }, [props.pageSize]);
 
   return (
     <>
