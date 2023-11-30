@@ -45,6 +45,12 @@ const MENU_ITEMS: MenuItemTypes[] = [
       label: "Utilisateurs",
       url: "/apps/admin/utilisateurs",
       parentKey: "admin",
+    },
+    {
+      key: "changelogs",
+      label: "Journal des modifications",
+      url: "/apps/admin/changelogs",
+      parentKey: "admin",
     }
     ]
   },

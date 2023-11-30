@@ -1,5 +1,5 @@
 import mongoose, { Model, Types } from "mongoose";
-import { Changelog } from './Changelog';
+import { ChangelogModel, IChangelog } from './Changelog'; // Import ChangelogModel and IChangelog
 
 // Création du type final Route
 export type Route = {
@@ -29,20 +29,41 @@ const routeSchema = new mongoose.Schema<Route>({
 })
 
 routeSchema.pre('save', function(next) {
-    const changes = this.getChanges();
-    if (!this.visible) {
-        const changelog = new Changelog({
-            action: 'delete',
-            documentId: this._id.toString(),
-            collection: 'Route',
-            changes: changes,
+    const userId = '5f9a3b9b9f9a3b9b9f9a3b9b';
+    let action = '';
+    let changes: { field: string; oldValue?: any; newValue?: any }[] = [];
+
+    if (this.isNew) {
+        action = 'CREER';
+        // Pour une nouvelle création, enregistrez tous les champs comme changements
+        changes = ['url', 'name', 'position', 'visible', 'createdAt', 'deletedAt', 'updatedAt'].map(field => ({
+            field: field,
+            newValue: this.get(field)
+        }));
+    } else {
+        // Pour une mise à jour, vérifiez chaque champ pour voir s'il a été modifié
+        ['url', 'name', 'position', 'visible', 'createdAt', 'deletedAt', 'updatedAt'].forEach(field => {
+            if (this.isModified(field)) {
+                changes.push({
+                    field: field,
+                    oldValue: this.get(field),
+                    newValue: this.get(field)
+                });
+                action = 'MODIFIER';
+            }
         });
-        changelog.save();
-    } else if (Object.keys(changes).length > 0) {
-        const changelog = new Changelog({
-            action: this.isNew ? 'create' : 'update',
-            documentId: this._id.toString(),
-            collection: 'Route',
+
+        if (!this.visible) {
+            action = 'SUPPRIMER';
+        }
+    }
+
+    if (action) {
+        const changelog = new ChangelogModel({
+            action: action,
+            documentId: this._id,
+            collectionName: 'Route',
+            user: userId,
             changes: changes,
         });
         changelog.save();
