@@ -3,7 +3,7 @@ import { Row, Col, Card, Modal, Button } from "react-bootstrap";
 import Table from "../../../../components/Table";
 import Changes from "./Changes";
 
-const ChangeLogModal = ({ change }: { change: any[] }) => {
+const ChangeLogModal = ({ change, documentId, collectionName }: { change: any[], documentId: string, collectionName: string }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -20,7 +20,7 @@ const ChangeLogModal = ({ change }: { change: any[] }) => {
           <Modal.Title>Détails du changement</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Changes change={change} />
+          <Changes change={change} documentId={documentId} collectionName={collectionName} />
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
       </Modal>
@@ -51,27 +51,6 @@ const AdminChangelogsApp = () => {
 
   const changelogColumns = [
     {
-      Header: "Action",
-      accessor: "action",
-      sort: true,
-    },
-    {
-      Header: "ID du document",
-      accessor: "documentId",
-      sort: true,
-    },
-    {
-      Header: "Nom de la collection",
-      accessor: "collectionName",
-      sort: true,
-    },
-    {
-      Header: "Changements",
-      accessor: "changes",
-      sort: true,
-      Cell: ({ value }: { value: any }) => <ChangeLogModal change={value} />,
-    },
-    {
       Header: "Horodatage",
       accessor: "timestamp",
       sort: true,
@@ -84,13 +63,28 @@ const AdminChangelogsApp = () => {
       accessor: "user",
       sort: true,
     },
+    {
+      Header: "Action",
+      accessor: "action",
+      sort: true,
+    },
+    {
+      Header: "Changements",
+      accessor: "changes",
+      sort: true,
+      Cell: ({ row: { original } }: { row: { original: any } }) => (
+        <ChangeLogModal change={original.changes} documentId={original.documentId} collectionName={original.collectionName} />
+      ),
+    },
   ];
 
   useEffect(() => {
     const fetchChangelogs = async () => {
       try {
+        console.log("Récupération des changelogs...");
         const response = await fetch("http://localhost:3333/changelogs");
         const data = await response.json();
+        console.log("Changelogs récupérés:", data);
         if (Array.isArray(data)) {
           setChangelogs(data);
           return data;

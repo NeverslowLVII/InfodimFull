@@ -80,7 +80,6 @@ export const deleteRoute = async (id: string) => {
         if (!response.ok) {
             throw new Error(`Erreur lors de la suppression de la route: ${response.statusText}`);
         }
-        // Check if the response is empty
         const text = await response.text();
         return text ? JSON.parse(text) : {};
     } catch (error) {

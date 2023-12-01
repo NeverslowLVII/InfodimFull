@@ -1,82 +1,73 @@
 import mongoose, { Model, Types } from "mongoose";
-import { ChangelogModel, IChangelog } from './Changelog'; // Import ChangelogModel and IChangelog
+import { ChangelogModel } from "./Changelog";
 
-// Création du type final Route
 export type Route = {
-    _id?: Types.ObjectId,
-    url: string,
-    name: string,
-    position: number,
-    visible: boolean,
-    createdAt: Date,
-    deletedAt: Date | null,
-    updatedAt: Date,
-}
+  _id?: Types.ObjectId;
+  url: string;
+  name: string;
+  position: number;
+  visible: boolean;
+  createdAt: Date;
+  deletedAt: Date | null;
+  updatedAt: Date;
+};
 
-export type RouteStatic = Model<Route> & {
-
-}
-
-// Création du schema routeSchema
+export type RouteStatic = Model<Route> & {};
 const routeSchema = new mongoose.Schema<Route>({
-    url: { type: String, required: true },
-    name: {type: String, required: true },
-    position: { type: Number, required: true },
-    visible: { type: Boolean, required: true },
-    createdAt: { type: Date, required: true, default: Date.now },
-    deletedAt: { type: Date, required: false },
-    updatedAt: { type: Date, required: false },
-})
+  url: { type: String, required: true },
+  name: { type: String, required: true },
+  position: { type: Number, required: true },
+  visible: { type: Boolean, required: true },
+  createdAt: { type: Date, required: true, default: Date.now },
+  deletedAt: { type: Date, required: false }, 
+  updatedAt: { type: Date, required: false },
+});
 
-routeSchema.pre('save', function(next) {
-    const userId = '5f9a3b9b9f9a3b9b9f9a3b9b';
-    let action = '';
-    let changes: { field: string; oldValue?: any; newValue?: any }[] = [];
+async function createChangelog(action: string, fields: string[], doc: any, userId: Types.ObjectId) {
+  console.log("Création d'un changelog pour l'action:", action);
+  const changes = fields.map((field) => {
+    const oldValue = doc.isModified(field) ? doc.get(field, null, { getters: false }) : undefined;
+    const newValue = doc.get(field);
+    return {
+      field: field,
+      oldValue: oldValue,
+      newValue: newValue,
+    };
+  });
 
-    if (this.isNew) {
-        action = 'CREER';
-        // Pour une nouvelle création, enregistrez tous les champs comme changements
-        changes = ['url', 'name', 'position', 'visible', 'createdAt', 'deletedAt', 'updatedAt'].map(field => ({
-            field: field,
-            newValue: this.get(field)
-        }));
-    } else {
-        // Pour une mise à jour, vérifiez chaque champ pour voir s'il a été modifié
-        ['url', 'name', 'position', 'visible', 'createdAt', 'deletedAt', 'updatedAt'].forEach(field => {
-            if (this.isModified(field)) {
-                changes.push({
-                    field: field,
-                    oldValue: this.get(field),
-                    newValue: this.get(field)
-                });
-                action = 'MODIFIER';
-            }
-        });
+  console.log("Détails du changelog:", changes);
 
-        if (!this.visible) {
-            action = 'SUPPRIMER';
-        }
+  const changelog = new ChangelogModel({
+    action: action,
+    documentId: doc._id,
+    collectionName: "Route",
+    user: userId,
+    changes: changes,
+  });
+
+  await changelog.save();
+  console.log("Changelog sauvegardé:", changelog);
+}
+
+routeSchema.pre("save", async function (next) {
+  const userId: Types.ObjectId = new mongoose.Types.ObjectId("5f9a3b9b9f9a3b9b9f9a3b9b");
+
+  const fieldsToLog = ["url", "name", "position", "visible", "createdAt", "deletedAt", "updatedAt"];
+  if (this.isNew) {
+    await createChangelog("CREER", fieldsToLog, this, userId);
+  } else {
+    const updatedFields = fieldsToLog.filter(field => this.isModified(field));
+    if (updatedFields.length > 0) {
+      await createChangelog("MODIFIER", updatedFields, this, userId);
     }
+  }
 
-    if (action) {
-        const changelog = new ChangelogModel({
-            action: action,
-            documentId: this._id,
-            collectionName: 'Route',
-            user: userId,
-            changes: changes,
-        });
-        changelog.save();
-    }
-
-    next();
+  next();
 });
 
 // Définition des méthodes
-routeSchema.methods = {
-
-}
+routeSchema.methods = {};
 
 // Définition des fonctions statiques
 
-export const Route = mongoose.model<Route, RouteStatic>('Route', routeSchema);
+export const Route = mongoose.model<Route, RouteStatic>("Route", routeSchema);
