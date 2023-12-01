@@ -16,7 +16,7 @@ export type RoleStatic = Model<Role> & {
 
 // Création du schema roleSchema
 const roleSchema = new mongoose.Schema<Role>({
-    id: { type: String, required: true, unique: true },
+    id: { type: String, required: false, unique: true },
     nom: { type: String, required: true },
     routes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Route' }],
     createdAt: { type: Date, required: true, default: Date.now },

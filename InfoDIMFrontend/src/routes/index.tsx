@@ -34,6 +34,7 @@ const Landing = React.lazy(() => import("../pages/landing/"));
 const AdminRouteApp = React.lazy(() => import("../pages/apps/Admin/Routes/Routes"));
 const AdminUserApp = React.lazy(() => import("../pages/apps/Admin/Users/index"));
 const AdminChangelogsApp = React.lazy(() => import("../pages/apps/Admin/Changelogs/index"));
+const AdminRoleApp = React.lazy(() => import ("../pages/apps/Admin/Roles/Roles"));
 
 // extra pages
 const Starter = React.lazy(() => import("../pages/other/Starter"));
@@ -151,6 +152,15 @@ const adminUserAppRoutes: RoutesProps = {
   element: <AdminUserApp />,
 };
 
+const adminRoleAppRoutes: RoutesProps = {
+  path: "/apps/admin/roles",
+  name: "Roles",
+  route: PrivateRoute,
+  roles: ["Admin"],
+  icon: "user",
+  element: <AdminRoleApp />,
+};
+
 const adminChangelogsAppRoutes: RoutesProps = {
   path: "/apps/admin/changelogs",
   name: "Changelogs",
@@ -163,6 +173,7 @@ const adminChangelogsAppRoutes: RoutesProps = {
 const appRoutes = [
   adminAppRoutes,
   adminUserAppRoutes,
+  adminRoleAppRoutes,
   adminChangelogsAppRoutes,
 ];
 
