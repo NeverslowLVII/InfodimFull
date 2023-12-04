@@ -40,8 +40,6 @@ const Logout = () => {
             </div>
           </div>
 
-          <h3>{t("See you again !")}</h3>
-
           <p className="text-muted">
             {" "}
             {t("You are now successfully sign out.")}{" "}

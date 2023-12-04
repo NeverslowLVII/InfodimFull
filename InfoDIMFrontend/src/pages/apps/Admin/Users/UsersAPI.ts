@@ -1,4 +1,4 @@
-import { User } from './UsersTypes';
+import { User } from './UsersInterface';
 import { generateTempPassword } from '../../../../utils/password';
 import mongoose, { Types } from 'mongoose';
 

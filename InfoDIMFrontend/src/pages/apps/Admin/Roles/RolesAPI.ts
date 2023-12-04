@@ -1,4 +1,4 @@
-import { Role } from "./RolesTypes";
+import { Role } from "./RolesInterface";
 
 export const fetchRoles = async (): Promise<Role[]> => {
   try {
@@ -57,15 +57,18 @@ export const updateRole = async (role: Role): Promise<Role> => {
     }
 }
 
-export const deleteRole = async (id: string): Promise<Role> => {
+export const deleteRole = async (id: string): Promise<void> => {
     try {
         console.log(`Suppression du rôle: ${id}`);
         const response = await fetch(`http://127.0.0.1:3333/roles/${id}`, {
             method: "DELETE",
         });
+        if (response.status === 204) {
+            console.log("Rôle supprimé avec succès");
+            return;
+        }
         const deletedRole = await response.json();
         console.log("Rôle supprimé avec succès:", deletedRole);
-        return deletedRole;
     } catch (error) {
         console.error("Erreur lors de la suppression du rôle:", error);
         throw error;

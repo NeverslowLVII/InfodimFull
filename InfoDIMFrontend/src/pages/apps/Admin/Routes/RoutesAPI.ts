@@ -1,4 +1,4 @@
-import { Route } from './RoutesTypes';
+import { Route } from './RoutesInterface';
 
 export const fetchRoutes = async () => {
     try {

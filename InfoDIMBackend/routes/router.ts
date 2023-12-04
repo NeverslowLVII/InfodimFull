@@ -5,6 +5,7 @@ import UserController from '../controllers/UserController';
 import RoleController from '../controllers/RoleController';
 import RouteController from '../controllers/RouteController';
 import ChangelogController from '../controllers/ChangelogController';
+import { logRoleChanges } from '../middleswares/Changelog'
 
 // Création du routeur
 const routes = Router();
@@ -20,11 +21,11 @@ routes.put('/users/:id', UserController.updateUser);
 routes.delete('/users/:id', UserController.deleteUser);
 
 // Routes pour les rôles
-routes.post('/roles', RoleController.createRole);
+routes.post('/roles', logRoleChanges, RoleController.createRole);
 routes.get('/roles', RoleController.getRoles);
 routes.get('/roles/:id', RoleController.getRole);
-routes.put('/roles/:id', RoleController.updateRole);
-routes.delete('/roles/:id', RoleController.deleteRole);
+routes.put('/roles/:id', logRoleChanges, RoleController.updateRole);
+routes.delete('/roles/:id', logRoleChanges, RoleController.deleteRole);
 
 // Routes pour les onglets
 routes.post('/routes', RouteController.createRoute);

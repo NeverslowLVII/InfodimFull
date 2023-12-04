@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 import Table from "../../../../components/Table";
 import { fetchRoutes, addRoute, updateRoute, deleteRoute } from "./RoutesAPI";
-import { Route } from "./RoutesTypes";
+import { Route } from "./RoutesInterface";
 import FeatherIcon from "feather-icons-react";
 import { toast } from "react-toastify";
 

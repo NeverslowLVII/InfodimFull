@@ -15,7 +15,7 @@ import {
   createRole,
   deleteRole,
 } from "./RolesAPI";
-import { Role } from "./RolesTypes";
+import { Role } from "./RolesInterface";
 import { toast } from "react-toastify";
 import FeatherIcon from "feather-icons-react";
 
@@ -42,7 +42,7 @@ function AdminRoleApp() {
   const roleColumns = [
     {
       Header: "Nom",
-      accessor: "nom",
+      accessor: "name",
       sort: true,
     },
     {
@@ -94,13 +94,13 @@ function AdminRoleApp() {
       event.stopPropagation();
     } else {
       if (editForm) {
-        const nom = form.elements.namedItem("roleName") as HTMLInputElement;
+        const name = form.elements.namedItem("roleName") as HTMLInputElement;
         const id = editForm._id;
 
-        if (nom && id) {
+        if (name && id) {
           const updatedRole = {
             ...editForm,
-            nom: nom.value,
+            name: name.value,
             _id: id,
           };
           try {
@@ -151,7 +151,7 @@ function AdminRoleApp() {
                             required
                             name="roleName"
                             type="text"
-                            value={editForm?.nom || ''}
+                            value={editForm?.name || ''}
                             className="mb-3"
                           />
                           <Button type="submit" style={{ marginRight: "1rem" }}>
@@ -195,9 +195,9 @@ function AdminRoleApp() {
                   ) as HTMLInputElement;
 
                   if (nameElement && nameElement.value) {
-                    const nom = nameElement.value;
+                    const name = nameElement.value;
 
-                    createRole(nom)
+                    createRole(name)
                       .then(async (newRole) => {
                         const updatedRoles = await fetchRoles();
                         setRoles(updatedRoles);
@@ -214,10 +214,10 @@ function AdminRoleApp() {
               >
                 <FloatingLabel
                   controlId="floatingRoleName"
-                  label="Nom"
+                  label=""
                   className="mb-3"
                 ></FloatingLabel>
-                <Form.Control required name="roleName" type="text" className="mb-3" />
+                <Form.Control required name="roleName" type="text" className="mb-3" placeholder="Nom" />
                 <Button type="submit">Ajouter un rôle</Button>
               </Form>
             </Card.Body>

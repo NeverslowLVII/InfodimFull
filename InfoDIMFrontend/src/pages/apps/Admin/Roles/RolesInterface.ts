@@ -1,6 +1,6 @@
 export interface Role{
     _id?: string;
-    nom: string;
+    name: string;
     createdAt: Date;
     deletedAt: Date | null;
     updatedAt: Date;

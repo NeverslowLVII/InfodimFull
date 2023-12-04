@@ -18,7 +18,7 @@ import {
   fetchRoles,
   deleteUser,
 } from "./UsersAPI";
-import { User } from "./UsersTypes";
+import { User } from "./UsersInterface";
 import FormInput from "../../../../components/FormInput";
 import { generateTempPassword } from "../../../../utils/password";
 import mongoose from "mongoose";
