@@ -472,7 +472,10 @@ const SweetAlerts = withSwal((props: any) => {
                                   "via AJAX request",
                                 showLoaderOnConfirm: true,
                                 preConfirm: function () {
-                                  return new Promise<void>(function (resolve) {
+                                  return new Promise<void>(function (
+                                    resolve,
+                                    reject
+                                  ) {
                                     fetch("https://api.ipify.org?format=json")
                                       .then((response) => {
                                         return response.json();
@@ -480,6 +483,10 @@ const SweetAlerts = withSwal((props: any) => {
                                       .then((data) => {
                                         swal.insertQueueStep(data.ip);
                                         resolve();
+                                      })
+                                      .catch((error) => {
+                                        console.error("Erreur:", error);
+                                        reject(error);
                                       });
                                   });
                                 },

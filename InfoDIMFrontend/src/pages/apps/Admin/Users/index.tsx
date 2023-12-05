@@ -95,8 +95,8 @@ function AdminUserApp() {
       Header: "Rôles",
       accessor: "roles",
       Cell: ({ value }: { value: any }) =>
-        value.map((role: { nom: string }) => (
-          <Badge bg="primary" className="me-1">
+        value.map((role: { nom: string }, index: number) => (
+          <Badge key={index} bg="primary" className="me-1">
             {role.nom}
           </Badge>
         )),

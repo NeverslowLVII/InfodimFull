@@ -49,7 +49,7 @@ const SignInSignUp = () => {
     */
   const loginSchema = yupResolver(
     yup.object().shape({
-      username: yup.string().required(t("Veuillez entrer le nom d'utilisateur")),
+      username: yup.string().required(t("Veuillez entrer le matricule")),
       loginpassword: yup.string().required(t("Veuillez entrer le mot de passe")),
     })
   );

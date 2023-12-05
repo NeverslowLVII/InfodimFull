@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { Button, Alert, Row, Col } from "react-bootstrap";
-import { Navigate, Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Button, Alert} from "react-bootstrap";
+import { Navigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useTranslation } from "react-i18next";
 
 // actions
-import { resetAuth, loginUser } from "../../redux/actions";
+import { resetAuth } from "../../redux/actions";
 
 // store
 import { RootState, AppDispatch } from "../../redux/store";
@@ -25,10 +25,10 @@ interface UserData {
 const Login = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
+  const [user, setUser] = useState(null);
 
-  const { user, userLoggedIn, loading, error } = useSelector(
+  const { userLoggedIn, loading, error } = useSelector(
     (state: RootState) => ({
-      user: state.Auth.user,
       loading: state.Auth.loading,
       error: state.Auth.error,
       userLoggedIn: state.Auth.userLoggedIn,
@@ -52,8 +52,36 @@ const Login = () => {
   /*
   handle form submission
   */
-  const onSubmit = (formData: UserData) => {
-    dispatch(loginUser(formData["username"], formData["password"]));
+  const onSubmit = async (formData: UserData) => {
+    try {
+      // Récupérer le token CSRF
+      const csrfResponse = await fetch('http://localhost:3333/csrf-token');
+      const { csrfToken } = await csrfResponse.json();
+
+      const response = await fetch('http://localhost:3333/authenticate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'csrf-token': csrfToken  // Inclure le token CSRF dans le header
+        },
+        body: JSON.stringify({
+          matricule: formData["username"],
+          password: formData["password"]
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur de réseau lors de la tentative de connexion');
+      }
+      else{
+        console.log("Connexion réussie")
+      }
+
+      const data = await response.json();
+      setUser(data);
+    } catch (error) {
+      console.error('Erreur d\'authentification', error);
+    }
   };
 
   const location = useLocation();
@@ -67,7 +95,7 @@ const Login = () => {
 
       <AuthLayout
         helpText={t(
-          "Entrez votre adresse e-mail et votre mot de passe pour accéder au site d'information."
+          "Entrez votre matricule et votre mot de passe pour accéder au site d'information."
         )}
       >
         {error && (

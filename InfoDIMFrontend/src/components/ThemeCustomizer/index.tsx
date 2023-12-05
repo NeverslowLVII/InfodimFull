@@ -135,12 +135,10 @@ const ThemeCustomizer = () => {
   const changeLayoutMode = (value: any) => {
     var layout = value;
     switch (layout) {
-      case "fluid":
-        dispatch(changeLayoutModes(layoutConstants.LayoutMode.LAYOUT_DEFAULT));
-        break;
       case "detached":
         dispatch(changeLayoutModes(layoutConstants.LayoutMode.LAYOUT_DETACHED));
         break;
+      case "fluid":
       default:
         dispatch(changeLayoutModes(layoutConstants.LayoutMode.LAYOUT_DEFAULT));
         break;

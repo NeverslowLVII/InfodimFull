@@ -26,7 +26,7 @@ const Changes = ({ change, documentId, collectionName }: { change: any[], docume
       </thead>
       <tbody>
         {change.map((change, index) => (
-          <tr style={{backgroundColor: index % 2 === 0 ? '#e9ecef' : '#fff'}}>
+          <tr key={index} style={{backgroundColor: index % 2 === 0 ? '#e9ecef' : '#fff'}}>
             <td>{change.field}</td>
             <td>{change.oldValue}</td>
             <td>{change.newValue}</td>

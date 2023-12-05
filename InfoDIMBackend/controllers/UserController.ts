@@ -4,10 +4,14 @@ import mongoose from 'mongoose';
 
 export default {
   createUser: async (req: Request, res: Response) => {
-    if (req.body.roles) {
+    if (Array.isArray(req.body.roles)) {
       req.body.roles = req.body.roles.filter((role: string) => 
         mongoose.Types.ObjectId.isValid(role)
       ).map((role: string) => new mongoose.Types.ObjectId(role));
+    } else {
+      // Handle error here
+      res.status(400).json({ message: "Invalid roles array" });
+      return;
     }
     const user = new User(req.body);
     await user.save();
@@ -22,10 +26,13 @@ export default {
     res.json(user);
   },
   updateUser: async (req: Request, res: Response) => {
-    if (req.body.roles) {
+    if (Array.isArray(req.body.roles)) {
       req.body.roles = req.body.roles.filter((role: string) => 
         mongoose.Types.ObjectId.isValid(role)
       ).map((role: string) => new mongoose.Types.ObjectId(role));
+    } else {
+      // Handle error here
+      res.status(400).json({ message: "Invalid roles array" });
     }
     const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(user);

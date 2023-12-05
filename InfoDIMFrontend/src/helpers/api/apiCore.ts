@@ -112,8 +112,8 @@ class APICore {
   /**
    * post given data to url
    */
-  create = (url: string, data: any) => {
-    return axios.post(url, data);
+  create = (url: string, data: any, headers: any = {}) => {
+    return axios.post(url, data, { headers });
   };
 
   /**

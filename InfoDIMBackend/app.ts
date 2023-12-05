@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import routes from './routes/router';
+import { csrfProtection } from './middleswares/csurf';
+import cookieParser from 'cookie-parser'; // Ajoutez cette ligne
 
 class App {
   public express: express.Application;
@@ -16,7 +18,11 @@ class App {
 
   private middlewares (): void {
     this.express.use(express.json());
-    this.express.use(cors());
+    this.express.use(cookieParser());
+    this.express.use(cors({
+      allowedHeaders: ['Content-Type', 'csrf-token']
+    }));
+    this.express.use(csrfProtection);
   }
 
   private database (): void {
@@ -24,6 +30,9 @@ class App {
   }
 
   private routes (): void {
+    this.express.get('/csrf-token', csrfProtection, (req, res) => {
+      res.json({ csrfToken: req.csrfToken() });
+    });
     this.express.use(routes);
   }
 }

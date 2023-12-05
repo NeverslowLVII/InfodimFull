@@ -14,8 +14,8 @@ export type User = {
 }
 
 // Ce type représente la structure statique de l'objet User
-export type UserStatic = Model<User> & {
-
+export interface UserStatic extends Model<User> {
+    authenticate(matricule: string, password: string): Promise<User | null>;
 }
 
 // Création du schéma userSchema
@@ -37,6 +37,18 @@ userSchema.methods = {
 }
 
 // Définition des fonctions statiques pour le schéma userSchema
+userSchema.statics.authenticate = async function(matricule: string, password: string) {
+  // Recherchez l'utilisateur par matricule
+  const user = await this.findOne({ matricule: matricule });
+
+  // Si l'utilisateur n'existe pas ou si le mot de passe ne correspond pas, renvoyez null
+  if (!user || user.password !== password) {
+    return null;
+  }
+
+  // Si l'utilisateur existe et que le mot de passe correspond, renvoyez l'utilisateur
+  return user;
+}
 
 // Création du modèle User à partir du schéma userSchema
 export const User = mongoose.model<User, UserStatic>('User', userSchema);

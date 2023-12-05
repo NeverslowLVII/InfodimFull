@@ -35,11 +35,11 @@ const MenuItemWithChildren = ({
     setOpen(activeMenuItems!.includes(item.key));
   }, [activeMenuItems, item]);
 
-  const toggleMenuItem = () => {
+  const toggleMenuItem = (event: React.MouseEvent) => {
+    event.stopPropagation();
     const status = !open;
     setOpen(status);
     if (toggleMenu) toggleMenu(item, status);
-    return false;
   };
 
   return (
