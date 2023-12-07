@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { User } from '../models/User';
-import mongoose from 'mongoose';
 
 export default {
   createUser: async (req: Request, res: Response) => {
