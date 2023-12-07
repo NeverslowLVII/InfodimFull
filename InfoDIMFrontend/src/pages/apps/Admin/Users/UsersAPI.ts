@@ -1,6 +1,5 @@
 import { User } from './UsersInterface';
 import { generateTempPassword } from '../../../../utils/password';
-import mongoose, { Types } from 'mongoose';
 
 export const fetchUsers = async () => {
     try {

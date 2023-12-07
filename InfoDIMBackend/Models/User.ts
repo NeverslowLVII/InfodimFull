@@ -1,4 +1,4 @@
-import mongoose, { Model } from "mongoose";
+
 
 // Création du type final User
 // Ce type représente la structure de l'objet User dans notre base de données

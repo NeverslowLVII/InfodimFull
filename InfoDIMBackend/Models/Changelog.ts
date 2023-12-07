@@ -1,5 +1,3 @@
-import mongoose from "mongoose";
-
 interface IChangeDetail {
   field: string;
   oldValue?: any;
