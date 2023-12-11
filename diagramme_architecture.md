@@ -1,32 +1,34 @@
 graph TB
 subgraph InfoDIM
 subgraph Front-end
-    UI[Interface Utilisateur]
-    Redux[Redux - Gestion d'état]
+    UI(fa:fa-user Interface Utilisateur)
+    Redux(fa:fa-refresh Redux - Gestion d'état)
 end
 subgraph Back-end
-    Server[Serveur d'Application]
-    Auth[Services d'authentification]
+    Server(fa:fa-server Serveur d'Application)
+    Auth(fa:fa-lock Services d'authentification)
     DB[(Base de Données)]
 end
 
 subgraph Connexions
-    API[API RESTful]
-    WS[WebSockets]
+    API(fa:fa-plug API RESTful)
+    WS(fa:fa-exchange WebSockets)
 end
 subgraph CI/CD
-    Jenkins[Jenkins - Intégration continue]
-    Github[GitHub Actions - Déploiement continu]
+    Jenkins(fa:fa-cogs Jenkins - Intégration continue)
+    Github(<i class="fa-brands fa-github"></i> GitHub Actions - Déploiement continu)
 end
 
-Utilisateur -->|Utilises| UI
-UI --> API
-UI --> WS
-Front-end -->|Pipeline CI/CD| CI/CD
-Back-end -->|Pipeline CI/CD| CI/CD
-Server -->|JWT, OAuth 2.0| Auth
-Server -->|Requêtes SQL| DB
-CI/CD -->|Déploiement| Server
-Connexions --> Server
-Redux -->|Gestion d'état| UI
+Utilisateur(fa:fa-user) -->|Utilises| UI
+UI -->|Appelle| API
+UI -->|Se connecte à| WS
+Front-end -->|Utilise le pipeline| CI/CD
+Back-end -->|Utilise le pipeline| CI/CD
+Server -->|Utilise| Auth(JWT, OAuth 2.0)
+Auth -.->|Répond à| Server
+Server -->|Envoie des requêtes SQL à| DB
+DB -.->|Répond avec des données à| Server
+Redux -->|Gère l'état de| UI
+Server -.->|Fournit des données à| UI
+Connexions -->|Fournit des connexions à| Server
 end
