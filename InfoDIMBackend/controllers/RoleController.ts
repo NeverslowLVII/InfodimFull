@@ -1,26 +1,34 @@
 import { Request, Response } from 'express';
-import { Role } from '../models/Roles';
+import oracleDB from '../oracleDB';
 
 export default {
   createRole: async (req: Request, res: Response) => {
-    const role = new Role(req.body);
-    await role.save();
-    res.status(201).json(role);
+    const sql = `INSERT INTO roles (name) VALUES (:name)`;
+    const binds = {...req.body};
+    await oracleDB.execute(sql, binds);
+    res.status(201).json({ message: 'Rôle créé avec succès', role: req.body });
   },
   getRoles: async (req: Request, res: Response) => {
-    const roles = await Role.find();
-    res.json(roles);
+    const sql = `SELECT * FROM roles`;
+    const result = await oracleDB.execute(sql);
+    res.json(result.rows);
   },
   getRole: async (req: Request, res: Response) => {
-    const role = await Role.findById(req.params.id);
-    res.json(role);
+    const sql = `SELECT * FROM roles WHERE id = :id`;
+    const binds = [req.params.id];
+    const result = await oracleDB.execute(sql, binds);
+    res.json(result.rows[0]);
   },
   updateRole: async (req: Request, res: Response) => {
-    const role = await Role.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(role);
+    const sql = `UPDATE roles SET name = :name WHERE id = :id`;
+    const binds = {name: req.body.name, id: req.params.id};
+    await oracleDB.execute(sql, Object.values(binds));
+    res.json({ message: 'Rôle mis à jour avec succès', role: req.body });
   },
   deleteRole: async (req: Request, res: Response) => {
-    await Role.findByIdAndDelete(req.params.id);
-    res.status(204).send();
+    const sql = `DELETE FROM roles WHERE id = :id`;
+    const binds = [req.params.id];
+    await oracleDB.execute(sql, binds);
+    res.status(204).json({ message: 'Rôle supprimé avec succès' });
   }
 };
