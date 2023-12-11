@@ -10,13 +10,16 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "typeorm": "^0.3.17"
+    "oracledb": "^6.2.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.15",
     "@types/express": "^4.17.20",
     "@types/node": "^20.8.9",
+    "@types/oracledb": "^6.0.4",
     "concurrently": "^8.2.2",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",

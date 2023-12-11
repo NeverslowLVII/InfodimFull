@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import routes from './routes/router';
+import oracledb from 'oracledb';
 
 class App {
   public express: express.Application;
@@ -19,7 +20,7 @@ class App {
   }
 
   private database (): void {
-    mongoose.connect('mongodb://127.0.0.1:27017/chs');
+    
   }
 
   private routes (): void {
