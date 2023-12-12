@@ -1,0 +1,28 @@
+<script src="https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js"></script>
+<div> 
+  <h1>Flowchart</h1>
+  <div class="mermaid">
+    graph LR
+    subgraph CI/CD
+        Jenkins[Jenkins - Intégration continue]
+        Github[GitHub Actions - Déploiement continu]
+    end
+    subgraph Front-end
+        UI[Interface Utilisateur]
+        Redux[Redux - Gestion d'état]
+    end
+    subgraph Back-end
+        Server[Serveur d'Application]
+        Auth[Services d'authentification]
+        DB[(Base de Données)]
+    end
+    
+    UI -->|API RESTful| Server
+    UI -->|WebSockets| Server
+    Front-end -->|Pipeline CI/CD| CI/CD
+    Back-end -->|Pipeline CI/CD| CI/CD
+    Server -->|JWT, OAuth 2.0| Auth
+    Server -->|Requêtes SQL| DB
+    Jenkins -->|Déploiement| Server
+  </div>
+</div>
