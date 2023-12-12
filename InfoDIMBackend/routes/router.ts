@@ -4,7 +4,6 @@ import StatusController from '../controllers/StatusController';
 import UserController from '../controllers/UserController';
 import RoleController from '../controllers/RoleController';
 import RouteController from '../controllers/RouteController';
-import ChangelogController from '../controllers/ChangelogController';
 
 // Création du routeur
 const routes = Router();
@@ -20,11 +19,11 @@ routes.put('/users/:id', UserController.updateUser);
 routes.delete('/users/:id', UserController.deleteUser);
 
 // Routes pour les rôles
-routes.post('/roles',  RoleController.createRole);
+routes.post('/roles', RoleController.createRole);
 routes.get('/roles', RoleController.getRoles);
 routes.get('/roles/:id', RoleController.getRole);
-routes.put('/roles/:id',  RoleController.updateRole);
-routes.delete('/roles/:id',  RoleController.deleteRole);
+routes.put('/roles/:id', RoleController.updateRole);
+routes.delete('/roles/:id', RoleController.deleteRole);
 
 // Routes pour les onglets
 routes.post('/routes', RouteController.createRoute);
@@ -33,10 +32,6 @@ routes.get('/routes/:id', RouteController.getRoute);
 routes.put('/routes/:id', RouteController.updateRoute);
 routes.delete('/routes/:id', RouteController.deleteRoute);
 routes.put('/route/:id/visibility', RouteController.updateRouteVisibility);
-
-// Routes pour les changelogs
-routes.post('/changelogs', ChangelogController.createChangelog);
-routes.get('/changelogs', ChangelogController.getChangelogs);
 
 // Exportation du routeur
 export default routes;
