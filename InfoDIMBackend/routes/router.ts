@@ -4,7 +4,6 @@ import StatusController from '../controllers/StatusController';
 import UserController from '../controllers/UserController';
 import RoleController from '../controllers/RoleController';
 import RouteController from '../controllers/RouteController';
-import ChangelogController from '../controllers/ChangelogController';
 import AuthController from '../controllers/AuthController';
 
 // Création du routeur
@@ -34,10 +33,6 @@ routes.get('/routes/:id', RouteController.getRoute);
 routes.put('/routes/:id', RouteController.updateRoute);
 routes.delete('/routes/:id', RouteController.deleteRoute);
 routes.put('/route/:id/visibility', RouteController.updateRouteVisibility);
-
-// Routes pour les changelogs
-routes.post('/changelogs', ChangelogController.createChangelog);
-routes.get('/changelogs', ChangelogController.getChangelogs);
 
 routes.post('/authenticate', AuthController.authenticate);
 

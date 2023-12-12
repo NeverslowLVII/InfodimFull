@@ -1,51 +1,54 @@
-import { Request, Response } from 'express';
-import { Route } from '../models/Routes';
+import { Request, Response, NextFunction } from 'express';
+import RouteService from '../Service/RouteService';
+import joi from 'joi';
+
+const routeService = new RouteService();
+
+const validateRoutes = (req: Request, res: Response, next: NextFunction) => {
+  console.log('Validation des onglets');
+  const schema = joi.object({
+    routes: joi.string().required(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error) {
+    console.error('Erreur de validation des onglets: ' + error.message);
+    return res.status(400).json({ message: error.message });
+  }
+  console.log('Validation des onglets réussie');
+  next();
+}
+
+const errorHandler = (fn: Function) => (req: Request, res: Response, next: NextFunction) =>
+  fn(req, res, next).catch(next);
 
 export default {
-  createRoute: async (req: Request, res: Response) => {
-    const route = new Route(req.body);
-    console.log('Nouvelle instance de Route créée avec les données reçues:', route);
-    await route.save();
-    console.log('Instance de Route sauvegardée dans la base de données:', route);
-    res.status(201).json({ message: 'Route créée avec succès', route });
-  },
-  getRoutes: async (req: Request, res: Response) => {
-    const routes = await Route.find();
+  createRoute: errorHandler(async (req: Request, res: Response) => {
+    validateRoutes(req, res, () => {});
+    const route = await routeService.createRoute(req.body);
+    res.status(201).json({ message: 'Onglet créé avec succès', route: route });
+  }),
+  getRoutes: errorHandler(async (req: Request, res: Response) => {
+    const routes = await routeService.getRoutes();
     res.json(routes);
-  },
-  getRoute: async (req: Request, res: Response) => {
-    const route = await Route.findById(req.params.id);
+  }),
+  getRoute: errorHandler(async (req: Request, res: Response) => {
+    const route = await routeService.getRoute(Number(req.params.id));
     if (!route) {
-      res.status(404).json({ message: 'Route non trouvée' });
+      res.status(404).json({ message: 'Onglet non trouvé' });
       return;
     }
-    res.json({ message: 'Route récupérée avec succès', route });
-  },
-  updateRoute: async (req: Request, res: Response) => {
-    const route = await Route.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!route) {
-      res.status(404).json({ message: 'Route non trouvée pour la mise à jour' });
-      return;
-    }
-    res.json({ message: 'Route mise à jour avec succès', route });
-  },
-  deleteRoute: async (req: Request, res: Response) => {
-    const route = await Route.findByIdAndDelete(req.params.id);
-    if (!route) {
-      res.status(404).json({ message: 'Route non trouvée pour la suppression' });
-      return;
-    }
-    res.status(204).json({ message: 'Route supprimée avec succès' });
-  },
-  updateRouteVisibility: async (req: Request, res: Response) => {
-    const route = await Route.findById(req.params.id);
-    if (!route) {
-      res.status(404).json({ message: 'Route non trouvée' });
-      return;
-    }
-    route.visible = req.body.visible;
-    await route.save();
-    res.json({ message: 'Route visibilité mise à jour avec succès', route });
-    return;
-  }
+    res.json({ message: 'Onglet récupéré avec succès', route: route });
+  }),
+  updateRoute: errorHandler(async (req: Request, res: Response) => {
+    const route = await routeService.updateRoute(Number(req.params.id), req.body);
+    res.json({ message: 'Onglet mis à jour avec succès', route: route });
+  }),
+  deleteRoute: errorHandler(async (req: Request, res: Response) => {
+    await routeService.deleteRoute(Number(req.params.id));
+    res.status(204).json({ message: 'Onglet supprimée avec succès' });
+  }),
+  updateRouteVisibility: errorHandler(async (req: Request, res: Response) => {
+    const visibility = await routeService.updateRouteVisibility(Number(req.params.id), req.body.visible);
+    res.json({ message: 'visibilité de l\'onglet mise à jour avec succès', visibility: visibility });
+  })
 };
