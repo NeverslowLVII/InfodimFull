@@ -21,7 +21,6 @@ import {
 import { User } from "./UsersInterface";
 import FormInput from "../../../../components/FormInput";
 import { generateTempPassword } from "../../../../utils/password";
-import mongoose from "mongoose";
 import { toast } from "react-toastify";
 import FeatherIcon from "feather-icons-react";
 
