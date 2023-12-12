@@ -1,29 +1,28 @@
 import oracledb from 'oracledb';
 
-// OracleDB configuration
 const config = {
-  user: process.env.ORACLEDB_USER, // Set your OracleDB username here
-  password: process.env.ORACLEDB_PASSWORD, // Set your OracleDB password here
-  connectString: process.env.ORACLEDB_CONNECTION_STRING, // Set your OracleDB connection string here
+  user: process.env.ORACLEDB_USER,
+  password: process.env.ORACLEDB_PASSWORD,
+  connectString: process.env.ORACLEDB_CONNECTION_STRING,
 };
 
-// Initialize the connection pool
-async function initialize() {
+export async function initialize(): Promise<void> {
+  console.log('Initialisation de la base de données...');
   try {
     await oracledb.createPool(config);
-    console.log('Connection pool started');
+    console.log('La pool de connexion a démarré');
   } catch (err) {
-    console.error('Initialization failed: ' + err.message);
+    console.error('L\'initialisation a échoué: ' + err.message);
   }
 }
 
-// Close the connection pool
-async function close() {
+export async function close(): Promise<void> {
+  console.log('Fermeture de la base de données...');
   try {
     await oracledb.getPool().close(10);
-    console.log('Connection pool closed');
+    console.log('La pool de connexion est fermée');
   } catch (err) {
-    console.error('Error closing the connection pool: ' + err.message);
+    console.error('Erreur lors de la fermeture de la pool de connexion: ' + err.message);
   }
 }
 
@@ -32,32 +31,29 @@ interface Options {
   [key: string]: any;
 }
 
-// Function to execute SQL queries
-async function execute(sql: string, binds: any[] = [], opts: Options = {}) {
+export async function execute(sql: string, binds: any[] = [], opts: Options = {}) {
+  console.log('Exécution de la requête SQL...');
   let connection, result;
-  opts.outFormat = oracledb.OUT_FORMAT_OBJECT; // Return results as objects
+  opts.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
   try {
     connection = await oracledb.getConnection();
     result = await connection.execute(sql, binds, opts);
+    console.log('La requête SQL a été exécutée avec succès');
   } catch (err) {
-    console.error('Error executing query: ' + err.message);
+    console.error('Erreur lors de l\'exécution de la requête: ' + err.message);
     throw err;
   } finally {
     if (connection) {
+      console.log('Fermeture de la connexion...');
       try {
         await connection.close();
+        console.log('La connexion est fermée');
       } catch (err) {
-        console.error('Error closing connection: ' + err.message);
+        console.error('Erreur lors de la fermeture de la connexion: ' + err.message);
       }
     }
   }
 
   return result;
 }
-
-export default {
-  initialize,
-  close,
-  execute,
-};

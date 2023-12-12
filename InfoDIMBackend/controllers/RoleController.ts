@@ -1,34 +1,45 @@
-import { Request, Response } from 'express';
-import oracleDB from '../oracleDB';
+import { Request, Response, NextFunction } from 'express';
+import RoleService from '../Service/RoleService';
+import joi from 'joi';
+
+const roleService = new RoleService();
+
+const validateRoles = (req: Request, res: Response, next: Function) => {
+  console.log('Validation des rôles');
+  const schema = joi.object({
+    name: joi.string().required(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error) {
+    console.error('Erreur de validation des rôles: ' + error.message);
+    return res.status(400).json({ message: error.message });
+  }
+  console.log('Validation des rôles réussie');
+  next();
+}
+
+const errorHandler = (fn: Function) => (req: Request, res: Response, next: NextFunction) =>
+  fn(req, res, next).catch(next);
 
 export default {
-  createRole: async (req: Request, res: Response) => {
-    const sql = `INSERT INTO roles (name) VALUES (:name)`;
-    const binds = {...req.body};
-    await oracleDB.execute(sql, binds);
-    res.status(201).json({ message: 'Rôle créé avec succès', role: req.body });
-  },
-  getRoles: async (req: Request, res: Response) => {
-    const sql = `SELECT * FROM roles`;
-    const result = await oracleDB.execute(sql);
-    res.json(result.rows);
-  },
-  getRole: async (req: Request, res: Response) => {
-    const sql = `SELECT * FROM roles WHERE id = :id`;
-    const binds = [req.params.id];
-    const result = await oracleDB.execute(sql, binds);
-    res.json(result.rows[0]);
-  },
-  updateRole: async (req: Request, res: Response) => {
-    const sql = `UPDATE roles SET name = :name WHERE id = :id`;
-    const binds = {name: req.body.name, id: req.params.id};
-    await oracleDB.execute(sql, Object.values(binds));
-    res.json({ message: 'Rôle mis à jour avec succès', role: req.body });
-  },
-  deleteRole: async (req: Request, res: Response) => {
-    const sql = `DELETE FROM roles WHERE id = :id`;
-    const binds = [req.params.id];
-    await oracleDB.execute(sql, binds);
+  createRole: [validateRoles, errorHandler(async (req: Request, res: Response) => {
+    const role = await roleService.createRole(req.body);
+    res.status(201).json({ message: 'Rôle créé avec succès', role: role });
+  })],
+  getRoles: errorHandler(async (req: Request, res: Response) => {
+    const roles = await roleService.getRoles();
+    res.json(roles);
+  }),
+  getRole: errorHandler(async (req: Request, res: Response) => {
+    const role = await roleService.getRole(Number(req.params.id));
+    res.json(role);
+  }),
+  updateRole: [validateRoles, errorHandler(async (req: Request, res: Response) => {
+    const role = await roleService.updateRole(Number(req.params.id), req.body);
+    res.json({ message: 'Rôle mis à jour avec succès', role: role });
+  })],
+  deleteRole: errorHandler(async (req: Request, res: Response) => {
+    await roleService.deleteRole(Number(req.params.id));
     res.status(204).json({ message: 'Rôle supprimé avec succès' });
-  }
+  })
 };
