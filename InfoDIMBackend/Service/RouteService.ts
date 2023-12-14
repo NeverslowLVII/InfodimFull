@@ -3,7 +3,7 @@ import { execute } from '../oracleDB';
 export default class RouteService {
     async createRoute(routeData: any): Promise<any> {
         console.log('Création d\'un onglet', routeData);
-        const sql = `INSERT INTO ROUTES (ROLES) VALUES (:ROLES)`;
+        const sql = `INSERT INTO ROUTES (URL, NAME, POSITION, VISIBLE) VALUES (:URL, :NAME, :POSITION, :VISIBLE)`;
         const binds = { ...routeData };
         try {
             await execute(sql, binds);

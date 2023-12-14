@@ -40,6 +40,8 @@ export async function execute(sql: string, binds: any[] = [], opts: Options = {}
     connection = await oracledb.getConnection();
     result = await connection.execute(sql, binds, opts);
     console.log('La requête SQL a été exécutée avec succès');
+    await connection.commit();
+    console.log('Commit effectué');
   } catch (err) {
     console.error('Erreur lors de l\'exécution de la requête: ' + err.message);
     throw err;

@@ -7,7 +7,10 @@ const routeService = new RouteService();
 const validateRoutes = (req: Request, res: Response, next: NextFunction) => {
   console.log('Validation des onglets');
   const schema = joi.object({
-    routes: joi.string().required(),
+    url: joi.string().required(),
+    name: joi.string().required(),
+    position: joi.string().required(),
+    visible: joi.string().required(),
   });
   const { error } = schema.validate(req.body);
   if (error) {
