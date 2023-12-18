@@ -11,12 +11,22 @@ const routes = Router();
 // Routes pour le statut
 routes.get('/status', StatusController.status);
 
+<<<<<<< Updated upstream
 // Routes pour les utilisateurs
 routes.post('/users', UserController.createUser);
 routes.get('/users', UserController.getUsers);
 routes.get('/users/:id', UserController.getUser);
 routes.put('/users/:id', UserController.updateUser);
 routes.delete('/users/:id', UserController.deleteUser);
+=======
+routes.post('/login', AuthController.login);
+
+routes.post('/users', authenticateJWT, UserController.createUser);
+routes.get('/users', authenticateJWT, UserController.getUsers);
+routes.get('/users/:id', authenticateJWT, UserController.getUser);
+routes.put('/users', authenticateJWT, UserController.updateUser);
+routes.delete('/users/:id', authenticateJWT, UserController.deleteUser);
+>>>>>>> Stashed changes
 
 // Routes pour les rôles
 routes.post('/roles', RoleController.createRole);

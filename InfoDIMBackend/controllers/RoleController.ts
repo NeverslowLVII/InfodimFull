@@ -24,7 +24,7 @@ const errorHandler = (fn: Function) => (req: Request, res: Response, next: NextF
 export default {
   createRole: [validateRoles, errorHandler(async (req: Request, res: Response) => {
     const role = await roleService.createRole(req.body);
-    res.status(201).json({ message: 'Rôle créé avec succès', role: role });
+    res.json({ message: 'Rôle créé avec succès', role: role });
   })],
   getRoles: errorHandler(async (req: Request, res: Response) => {
     const roles = await roleService.getRoles();
@@ -40,6 +40,6 @@ export default {
   })],
   deleteRole: errorHandler(async (req: Request, res: Response) => {
     await roleService.deleteRole(Number(req.params.id));
-    res.status(204).json({ message: 'Rôle supprimé avec succès' });
+    res.json({ message: 'Rôle supprimé avec succès' });
   })
 };

@@ -26,8 +26,13 @@ export default {
     console.log('Création d\'un utilisateur');
     const user = await userService.createUser(req.body);
     console.log('Utilisateur créé avec succès');
+<<<<<<< Updated upstream
     res.status(201).json({ message: 'Utilisateur créé avec succès', user });
   }),
+=======
+    res.json({ message: 'Utilisateur créé avec succès', user });
+  })],
+>>>>>>> Stashed changes
   getUsers: errorHandler(async (req: Request, res: Response) => {
     console.log('Récupération des utilisateurs');
     const users = await userService.getUsers();
@@ -39,11 +44,11 @@ export default {
     const user = await userService.getUserById(Number(req.params.id));
     if (!user) {
       console.error('Utilisateur non trouvé');
-      res.status(404).json({ message: 'Utilisateur non trouvé' });
+      res.json({ message: 'Utilisateur non trouvé' });
       return;
     }
     console.log('Utilisateur récupéré avec succès');
-    res.json({ message: 'Utilisateur récupéré avec succès', user });
+    res.json({ user });
   }),
   updateUser: [validateRoles, errorHandler(async (req: Request, res: Response) => {
     console.log('Mise à jour d\'un utilisateur');
@@ -55,6 +60,6 @@ export default {
     console.log('Suppression d\'un utilisateur');
     await userService.deleteUser(Number(req.params.id));
     console.log('Utilisateur supprimé avec succès');
-    res.status(204).end();
+    res.end();
   })]
 };
