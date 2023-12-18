@@ -8,8 +8,8 @@ interface ThemeContextType {
   toggleTheme: () => void;
 }
 
-const defaultState = {
-  theme: 'light',
+const defaultState: ThemeContextType = {
+  theme: 'light' as Theme,
   toggleTheme: () => {},
 };
 
