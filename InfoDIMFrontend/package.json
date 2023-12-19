@@ -43,7 +43,7 @@
     "react-ladda-button": "^1.0.4",
     "react-nestable": "latest",
     "react-redux": "latest",
-    "react-router-dom": "latest",
+    "react-router-dom": "6.20.0",
     "react-scripts": "latest",
     "react-select": "latest",
     "react-simplemde-editor": "latest",
