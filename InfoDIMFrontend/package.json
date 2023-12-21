@@ -32,7 +32,7 @@
     "react-chartjs-2": "latest",
     "react-countdown": "latest",
     "react-countup": "latest",
-    "react-datepicker": "latest",
+    "react-datepicker": "4.24.0",
     "react-dom": "latest",
     "react-draft-wysiwyg": "latest",
     "react-dropzone": "latest",
