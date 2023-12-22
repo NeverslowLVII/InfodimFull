@@ -55,7 +55,7 @@
     "redux-saga": "latest",
     "sass": "latest",
     "simplebar-react": "latest",
-    "sortablejs": "latest",
+    "sortablejs": "1.15.1",
     "typescript": "latest",
     "web-vitals": "latest",
     "yup": "latest"
