@@ -10,7 +10,7 @@ L'architecture de la nouvelle application InfoDIM est conçue pour être robuste
 ## Composants de l'architecture
 
 ### Interface Utilisateur (Front-end)
-- Technologies choisies : React.js pour le développement de l'interface utilisateur, Redux pour la gestion d'état.
+- Technologies choisies : Next.js pour le développement de l'interface utilisateur, Redux pour la gestion d'état.
 - Responsivité et accessibilité : Utilisation de frameworks CSS comme Bootstrap pour assurer la responsivité, conformité avec les directives WCAG 2.1 niveau AA pour l'accessibilité web.
 - Stratégie de déploiement : Utilisation de serveurs statiques, CDN pour le déploiement.
 
@@ -86,19 +86,19 @@ La revue et la validation de l'architecture sont des étapes cruciales pour gara
 - **CI/CD (Continuous Integration/Continuous Deployment)**: Pratiques de développement logiciel où les développeurs fusionnent fréquemment les modifications de code dans un dépôt central, suivies de builds et de tests automatisés.
 
 ## Références
-- React documentation: [https://react.dev/learn](https://react.dev/learn)
-- Node.js Express framework: [https://expressjs.com/](https://expressjs.com/)
-- Oracle Database documentation: [https://docs.oracle.com/en/database/](https://docs.oracle.com/en/database/)
+- [Documentation de Next.js](https://nextjs.org/docs)
+- [Framework Node.js Express](https://expressjs.com/)
+- [Documentation de la base de données Oracle](https://docs.oracle.com/en/database/)
 
 ## Ressources supplémentaires
-- Bootstrap framework: [https://react-bootstrap.netlify.app/docs/getting-started/introduction](https://react-bootstrap.netlify.app/docs/getting-started/introduction)
-- Redux state management: [https://redux.js.org/introduction/getting-started](https://redux.js.org/introduction/getting-started)
+- [Framework Bootstrap](https://react-bootstrap.netlify.app/docs/getting-started/introduction)
+- [Gestion d'état Redux](https://redux.js.org/introduction/getting-started)
 
 ## Modèles d'architecture
-[Accédez au diagramme ici](https://lucid.app/lucidchart/fad45acb-dbb9-48cd-95b7-45aa98ac96f7/edit?viewport_loc=-85%2C-477%2C2742%2C1307%2C0_0&invitationId=inv_e5e13ed4-816a-416e-864c-7fe34075c86f)
+[Diagramme disponible ici](https://lucid.app/lucidchart/fad45acb-dbb9-48cd-95b7-45aa98ac96f7/edit?viewport_loc=-85%2C-477%2C2742%2C1307%2C0_0&invitationId=inv_e5e13ed4-816a-416e-864c-7fe34075c86f)
 
 ## Exemples de code
-- Exemple d'implémentation d'authentification JWT: [https://github.com/auth0/node-jsonwebtoken](https://github.com/auth0/node-jsonwebtoken)
+- [Exemple d'implémentation d'authentification JWT](https://github.com/auth0/node-jsonwebtoken)
 
 ## Liste des outils
 - Développement: Visual Studio Code, ESLint, Prettier
