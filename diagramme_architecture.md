@@ -1,22 +1,22 @@
 graph TB
 subgraph InfoDIM
 subgraph Front-end
-    UI(fa:fa-user Interface Utilisateur)
-    Redux(fa:fa-refresh Redux - Gestion d'état)
+UI(fa:fa-user Interface Utilisateur)
+Redux(fa:fa-refresh Redux - Gestion d'état)
 end
 subgraph Back-end
-    Server(fa:fa-server Serveur d'Application)
-    Auth(fa:fa-lock Services d'authentification)
-    DB[(Base de Données)]
+Server(fa:fa-server Serveur d'Application)
+Auth(fa:fa-lock Services d'authentification)
+DB\[(Base de Données)]
 end
 
 subgraph Connexions
-    API(fa:fa-plug API RESTful)
-    WS(fa:fa-exchange WebSockets)
+API(fa:fa-plug API RESTful)
+WS(fa:fa-exchange WebSockets)
 end
 subgraph CI/CD
-    Jenkins(fa:fa-cogs Jenkins - Intégration continue)
-    Github(<i class="fa-brands fa-github"></i> GitHub Actions - Déploiement continu)
+Jenkins(fa:fa-cogs Jenkins - Intégration continue)
+Github(<i class="fa-brands fa-github"></i> GitHub Actions - Déploiement continu)
 end
 
 Utilisateur(fa:fa-user) -->|Utilises| UI
