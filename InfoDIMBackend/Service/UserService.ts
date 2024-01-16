@@ -4,9 +4,9 @@ export default class UserService {
   async createUser(userData: any): Promise<any> {
     console.log('Création d\'un utilisateur', userData);
     const sql = `INSERT INTO USERS (ROLES) VALUES (:ROLES)`;
-    const binds = { ROLES: userData.ROLES };
+    const binds = {...userData};
     try {
-      await execute(sql, Object.values(binds));
+      await execute(sql, binds);
       console.log('Utilisateur créé avec succès', userData);
     } catch (error) {
       console.error('Erreur lors de la création de l\'utilisateur', error);
