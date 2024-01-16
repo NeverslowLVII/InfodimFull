@@ -18,21 +18,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-<<<<<<< Updated upstream
     "jsx": "react",
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    }
-=======
-    "jsx": "react-jsx",
-    "strict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true
->>>>>>> Stashed changes
+    "noUnusedParameters": true
   },
   "include": [
     "src"

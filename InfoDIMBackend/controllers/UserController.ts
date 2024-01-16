@@ -26,13 +26,8 @@ export default {
     console.log('Création d\'un utilisateur');
     const user = await userService.createUser(req.body);
     console.log('Utilisateur créé avec succès');
-<<<<<<< Updated upstream
-    res.status(201).json({ message: 'Utilisateur créé avec succès', user });
-  }),
-=======
     res.json({ message: 'Utilisateur créé avec succès', user });
-  })],
->>>>>>> Stashed changes
+  }),
   getUsers: errorHandler(async (req: Request, res: Response) => {
     console.log('Récupération des utilisateurs');
     const users = await userService.getUsers();

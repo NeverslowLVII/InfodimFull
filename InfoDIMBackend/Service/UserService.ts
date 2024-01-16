@@ -3,7 +3,6 @@ import { execute } from '../oracleDB';
 export default class UserService {
   async createUser(userData: any): Promise<any> {
     console.log('Création d\'un utilisateur', userData);
-<<<<<<< Updated upstream
     const sql = `INSERT INTO USERS (ROLES) VALUES (:ROLES)`;
     const binds = { ROLES: userData.ROLES };
     try {
@@ -11,23 +10,6 @@ export default class UserService {
       console.log('Utilisateur créé avec succès', userData);
     } catch (error) {
       console.error('Erreur lors de la création de l\'utilisateur', error);
-=======
-    const sql = `INSERT INTO USERS (FIRSTNAME, LASTNAME, MATRICULE, PASSWORD) VALUES (:FIRSTNAME, :LASTNAME, :MATRICULE, :PASSWORD)`;
-    const binds = { 
-      FIRSTNAME: userData.firstname, 
-      LASTNAME: userData.lastname, 
-      MATRICULE: userData.matricule,
-      PASSWORD: userData.password
-    };
-    if (binds.PASSWORD) {
-      binds.PASSWORD = bcrypt.hashSync(binds.PASSWORD, 10);
-    }
-    try {
-        await execute(sql, Object.values(binds));
-        console.log('Utilisateur créé avec succès', userData);
-    } catch (error) {
-        console.error('Erreur lors de la création de l\'utilisateur', error);
->>>>>>> Stashed changes
     }
     return userData;
   }

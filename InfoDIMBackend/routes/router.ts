@@ -12,12 +12,9 @@ const routes = Router();
 // Routes pour le statut
 routes.get('/status', StatusController.status);
 
-<<<<<<< Updated upstream
-=======
 // Routes pour l'authentification
 routes.post('/login', AuthController.login);
 
->>>>>>> Stashed changes
 // Routes pour les utilisateurs
 routes.post('/users', UserController.createUser);
 routes.get('/users', UserController.getUsers);
