@@ -11,7 +11,7 @@ interface User {
     PASSWORD: string;
   }
   
-  class AuthController {
+class AuthController {
     async login(req: Request, res: Response) {
       const { username, password } = req.body;
   
@@ -31,9 +31,9 @@ interface User {
         );
   
         console.log('Vérification des données :', result.rows);
-        if (result.rows.length === 0) {
-          console.log('Nom d\'utilisateur ou mot de passe invalide');
-          return res.json({ message: 'Invalid username or password' });
+        if (result.rows?.length === 0) {
+          console.log('Nom d\'utilisateur invalide');
+          return res.json({ message: 'Invalid username' });
         }
   
         const user = result.rows[0] as User;
@@ -41,17 +41,17 @@ interface User {
   
         console.log('Vérification du mot de passe :', passwordIsValid);
         if (!passwordIsValid) {
-          console.log('Nom d\'utilisateur ou mot de passe invalide');
-          return res.json({ message: 'Invalid username or password' });
+          console.log('Mot de passe invalide');
+          return res.json({ message: 'Invalid password' });
         }
   
         console.log('Génération du token...');
-        const token = jwt.sign({ id: user.ID, username: user.MATRICULE }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: user.ID, username: user.MATRICULE }, process.env.JWT_SECRET as string, {
           expiresIn: 86400,
         });
   
         console.log('Connexion réussie');
-        res.json({ auth: true, token });
+        res.json({ auth: true, token, success: true });
       } catch (error) {
         console.error('Erreur interne du serveur', error);
         res.json({ message: 'Internal server error' });
