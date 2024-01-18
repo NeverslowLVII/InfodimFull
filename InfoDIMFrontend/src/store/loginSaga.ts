@@ -8,19 +8,20 @@ function* handleLogin(action: any): Generator<any, any, any> {
     if (response.data.success) {
       yield put(setCredentials({ token: response.data.token }));
       localStorage.setItem('authToken', response.data.token);
-      // Redirect to dashboard or handle successful login
+      console.info('Login successful');
     } else {
       yield put(loginFailure());
-      // Handle login error
+      console.warn('Login failed');
     }
   } catch (error) {
     yield put(logout());
-    // Handle login error
+    console.error('Login error', error);
   }
 }
 
 function* watchLogin() {
   yield takeLatest(loginRequest.type, handleLogin);
+  console.info('Login watcher started');
 }
 
 export default watchLogin;

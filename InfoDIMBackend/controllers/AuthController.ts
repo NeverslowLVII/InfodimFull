@@ -16,7 +16,8 @@ class AuthController {
       const { username, password } = req.body;
   
       try {
-        console.log('Tentative de connexion...');
+        console.log('Tentative de connexion..');
+        console.log('Username:', username);
         const connection = await oracledb.getConnection({
           user: process.env.ORACLEDB_USER,
           password: process.env.ORACLEDB_PASSWORD,
@@ -51,6 +52,7 @@ class AuthController {
         });
   
         console.log('Connexion réussie');
+        console.log('Token:', token);
         res.json({ auth: true, token, success: true });
       } catch (error) {
         console.error('Erreur interne du serveur', error);

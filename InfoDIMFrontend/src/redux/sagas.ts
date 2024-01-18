@@ -1,16 +1,6 @@
-<<<<<<< Updated upstream:InfoDIMFrontend/src/redux/sagas.ts
-import { all } from "redux-saga/effects";
-
-import authSaga from "./auth/saga";
-import layoutSaga from "./layout/saga";
-
-export default function* rootSaga() {
-  yield all([authSaga(), layoutSaga()]);
-}
-=======
 
 import { all, fork } from 'redux-saga/effects';
-import watchLogin from './loginSaga';
+import watchLogin from '../store/loginSaga';
 
 function* rootSaga() {
   yield all([
@@ -20,4 +10,3 @@ function* rootSaga() {
 }
 
 export default rootSaga;
->>>>>>> Stashed changes:InfoDIMFrontend/src/store/sagas.ts

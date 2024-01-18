@@ -11,14 +11,19 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    console.log('isAuthenticated state:', isAuthenticated); // Logging isAuthenticated state
+    console.log('Checking authentication status:', isAuthenticated);
     if (isAuthenticated) {
+      console.log('User is authenticated, navigating to dashboard...');
       navigate('/dashboard');
+    } else {
+      console.log('User is not authenticated');
     }
   }, [isAuthenticated, navigate]);
 
   const handleLogin = () => {
-    console.log('Attempting login...'); // Logging before login attempt
+    console.log('Attempting to login with username:', username);
+    console.log('Attempting to login with password:', password);
+
     dispatch(loginRequest({ username, password }));
   };
 
@@ -26,17 +31,23 @@ const LoginPage: React.FC = () => {
     <div>
       <input
         type="text"
-        placeholder="Username"
+        placeholder="Matricule"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={(e) => {
+          console.log('Username input changed:', e.target.value);
+          setUsername(e.target.value);
+        }}
       />
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Mot de passe"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => {
+          console.log('Password input changed');
+          setPassword(e.target.value);
+        }}
       />
-      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleLogin}>Se connecter</button>
     </div>
   );
 };
