@@ -11,43 +11,74 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
 
   useEffect(() => {
-    console.log('Checking authentication status:', isAuthenticated);
     if (isAuthenticated) {
-      console.log('User is authenticated, navigating to dashboard...');
       navigate('/dashboard');
-    } else {
-      console.log('User is not authenticated');
     }
   }, [isAuthenticated, navigate]);
 
-  const handleLogin = () => {
-    console.log('Attempting to login with username:', username);
-    console.log('Attempting to login with password:', password);
-
+  const handleLogin = (event: React.FormEvent) => {
+    event.preventDefault();
     dispatch(loginRequest({ username, password }));
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Matricule"
-        value={username}
-        onChange={(e) => {
-          console.log('Username input changed:', e.target.value);
-          setUsername(e.target.value);
-        }}
-      />
-      <input
-        type="password"
-        placeholder="Mot de passe"
-        value={password}
-        onChange={(e) => {
-          console.log('Password input changed');
-          setPassword(e.target.value);
-        }}
-      />
-      <button onClick={handleLogin}>Se connecter</button>
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Connectez-vous à votre compte
+        </h2>
+      </div>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <form className="space-y-6" onSubmit={handleLogin}>
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              Matricule
+            </label>
+            <div className="mt-1">
+              <input
+                id="username"
+                name="username"
+                type="text"
+                autoComplete="username"
+                required
+                placeholder="Matricule"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Mot de passe
+            </label>
+            <div className="mt-1">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                placeholder="Mot de passe"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Se connecter
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
