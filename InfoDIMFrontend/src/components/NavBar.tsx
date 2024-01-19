@@ -1,12 +1,13 @@
 // NavBar.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { logout } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
 
-const navigation = [{ name: "Unités de soins", href: "#" }];
+const navigation = [{ name: "Tableau de bord", href: "/tableau-de-bord" }, { name: "À propos", href: "/about" }];
+
 
 export function NavBar() {
   const dispatch = useDispatch();
@@ -15,46 +16,34 @@ export function NavBar() {
     (state: any) => state.auth.isAuthenticated
   );
   const navigate = useNavigate();
-  const [hasScrolled, setHasScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setHasScrolled(window.scrollY > 0);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const handleLogout = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault(); // Prevent default anchor behavior
+    event.preventDefault();
     localStorage.removeItem("token");
     dispatch(logout());
     navigate("/");
   };
 
   return (
-    <header
-      className="inset-x-0 top-0 rounded-lg mt-4"
-      style={{ zIndex: 5000, position: "sticky" }}
-    >
+    // Header component
+    <header className={`fixed bg-white inset-x-0 top-0 z-50 rounded-3xl m-4`}>
+      {/* Navigation bar */}
       <nav
-  className={`backdrop-blur-md flex items-center justify-between p-6 md:px-8 transition-opacity ${
-    hasScrolled ? "bg-white bg-opacity-100" : "bg-white bg-opacity-0"
-  }`}
-  aria-label="Global"
->
+        className={`transition ease-in-out flex items-center justify-between p-6 md:px-8 shadow-lg`}
+        aria-label="Global"
+      >
         <div className="flex md:flex-1">
+          {/* Logo link */}
           <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">InfoDIM</span>
             <img
               className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+              src="https://tailwindui.com/img/logos/mark.svg?color=emerald&shade=600"
               alt=""
             />
           </a>
         </div>
+        {/* Mobile menu button */}
         <div className="flex md:hidden">
           <button
             type="button"
@@ -65,6 +54,7 @@ export function NavBar() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
+        {/* Desktop navigation links */}
         <div className="hidden md:flex md:gap-x-12">
           {navigation.map((item) => (
             <a
@@ -76,9 +66,10 @@ export function NavBar() {
             </a>
           ))}
         </div>
+        {/* Login/Logout link */}
         <div className="hidden md:flex md:flex-1 md:justify-end">
           <a
-            href={isAuthenticated ? "#" : "/login"}
+            href={isAuthenticated ? "#" : "/connexion"}
             onClick={
               isAuthenticated ? (event) => handleLogout(event) : undefined
             }
@@ -89,20 +80,20 @@ export function NavBar() {
           </a>
         </div>
       </nav>
+      {/* Mobile menu dialog */}
       <Dialog
         as="div"
         className="md:hidden"
         open={mobileMenuOpen}
         onClose={setMobileMenuOpen}
       >
-        <div className="fixed inset-0 z-50" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 pt-16 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
+            <a href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">InfoDIM</span>
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                src="https://tailwindui.com/img/logos/mark.svg?color=emerald&shade=600"
                 alt=""
               />
             </a>
@@ -130,7 +121,7 @@ export function NavBar() {
               </div>
               <div className="py-6">
                 <a
-                  href={isAuthenticated ? "#" : "/login"}
+                  href={isAuthenticated ? "#" : "/connexion"}
                   onClick={
                     isAuthenticated ? (event) => handleLogout(event) : undefined
                   }

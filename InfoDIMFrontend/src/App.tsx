@@ -7,20 +7,23 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import About from "./pages/About";
 import "./assets/main.css";
+import "./App.css";
 
 const App: React.FC = () => {
   return (
     <Router>
       <NavBar />
+      <div className="pt-28">
       <Routes>
         <Route path="/" element={<HeroSection />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/connexion" element={<LoginPage />} />
         <Route
-          path="/dashboard"
+          path="/tableau-de-bord"
           element={<PrivateRoute component={Dashboard} />}
         />
         <Route path="/about" element={<About />} />
       </Routes>
+      </div>
     </Router>
   );
 };

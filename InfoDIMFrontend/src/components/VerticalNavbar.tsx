@@ -16,10 +16,10 @@ const VerticalNavbar: React.FC = () => {
       </Navbar.Brand>
       <Navbar.Collapse>
         <Navbar.Link
-          href="/dashboard"
+          href="/tableau-de-bord"
           active={true}
         >
-          Dashboard
+          Tableau de bord
         </Navbar.Link>
         <Navbar.Link href="/settings">
           Settings

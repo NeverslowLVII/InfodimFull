@@ -32,7 +32,7 @@ const HorizontalNavbar: React.FC = () => {
             </span>
           </Dropdown.Header>
           <Dropdown.Item>
-            Dashboard
+            Tableau de bord
           </Dropdown.Item>
           <Dropdown.Item>
             Settings

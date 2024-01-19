@@ -73,7 +73,7 @@ const About: React.FC = () => {
               <div className="flex gap-x-3"></div>
               <div className="flex gap-x-3">
                 <UserGroupIcon
-                  className="h-5 w-5 text-indigo-600"
+                  className="h-5 w-5 text-emerald-600"
                   aria-hidden="true"
                 />
               </div>
