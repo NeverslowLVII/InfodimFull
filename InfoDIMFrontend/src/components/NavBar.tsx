@@ -4,9 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { logout } from "../store/authSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
-const navigation = [{ name: "Tableau de bord", href: "/tableau-de-bord" }, { name: "À propos", href: "/about" }];
+const navigation = [
+  { name: "Accueil", href: "/" },
+  { name: "Tableau de bord", href: "/tableau-de-bord" },
+  { name: "À propos", href: "/about" },
+  { name: "Contact", href: "/contact"}
+];
 
 
 export function NavBar() {
@@ -26,7 +31,7 @@ export function NavBar() {
 
   return (
     // Header component
-    <header className={`fixed bg-white inset-x-0 top-0 z-50 rounded-3xl m-4`}>
+    <header className={`fixed bg-white inset-x-0 top-0 z-50`}>
       {/* Navigation bar */}
       <nav
         className={`transition ease-in-out flex items-center justify-between p-6 md:px-8 shadow-lg`}
@@ -38,7 +43,7 @@ export function NavBar() {
             <span className="sr-only">InfoDIM</span>
             <img
               className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=emerald&shade=600"
+              src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=600"
               alt=""
             />
           </a>
@@ -57,13 +62,15 @@ export function NavBar() {
         {/* Desktop navigation links */}
         <div className="hidden md:flex md:gap-x-12">
           {navigation.map((item) => (
-            <a
+            <NavLink
               key={item.name}
-              href={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900"
+              to={item.href}
+              className={({ isActive }) => 
+                "text-sm font-semibold leading-6 text-gray-900" + (isActive ? " text-blue-600" : "")
+              }
             >
               {item.name}
-            </a>
+            </NavLink>
           ))}
         </div>
         {/* Login/Logout link */}
@@ -93,7 +100,7 @@ export function NavBar() {
               <span className="sr-only">InfoDIM</span>
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=emerald&shade=600"
+                src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=600"
                 alt=""
               />
             </a>
@@ -110,13 +117,15 @@ export function NavBar() {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 {navigation.map((item) => (
-                  <a
+                  <NavLink
                     key={item.name}
-                    href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    to={item.href}
+                    className={({ isActive }) => 
+                      "-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50" + (isActive ? " bg-gray-200" : "")
+                    }
                   >
                     {item.name}
-                  </a>
+                  </NavLink>
                 ))}
               </div>
               <div className="py-6">

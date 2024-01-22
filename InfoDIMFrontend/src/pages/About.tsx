@@ -43,7 +43,7 @@ const About: React.FC = () => {
                 À propos d'InfoDIM
               </h1>
               <p className="mt-6 text-xl leading-8 text-gray-700">
-                Version : 2.S.41
+                Version : 3.0
               </p>
               <p className="mt-4 text-base leading-7 text-gray-700">
                 Département de l'Information Médicale
@@ -67,21 +67,8 @@ const About: React.FC = () => {
             alt=""
           />
         </div>
-        <div className="lg:col-span-2 lg:col-start-1 lg:row-start-2 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
-          <div className="lg:pr-4">
-            <div className="max-w-xl text-base leading-7 text-gray-700 lg:max-w-lg">
-              <div className="flex gap-x-3"></div>
-              <div className="flex gap-x-3">
-                <UserGroupIcon
-                  className="h-5 w-5 text-emerald-600"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="flex gap-x-3"></div>
-            </div>
-          </div>
-        </div>
-        <div className="p-4 bg-gray-200 rounded-lg">
+      </div>
+      <div className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
         <p className="mt-4 text-base leading-7 text-gray-700">
           Les données sont extraites, en temps réel, des bases PASTEL et
           CORTEXTE
@@ -89,7 +76,6 @@ const About: React.FC = () => {
         <p className="mt-4 text-base leading-7 text-gray-700">
           Nous restons à votre disposition pour vos remarques, suggestions...
         </p>
-        </div>
       </div>
     </div>
   );
