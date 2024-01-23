@@ -4,6 +4,7 @@ import { NavBar } from "./components/NavBar";
 import { HeroSection } from "./components/HeroSection";
 import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
+import UnitesDeSoins from "./pages/dashboard/UnitesDeSoins";
 import PrivateRoute from "./components/PrivateRoute";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -14,17 +15,17 @@ const App: React.FC = () => {
   return (
     <Router>
       <NavBar />
-      <div className="pt-24">
-      <Routes>
-        <Route path="/" element={<HeroSection />} />
-        <Route path="/connexion" element={<LoginPage />} />
-        <Route
-          path="/tableau-de-bord"
-          element={<PrivateRoute component={Dashboard} />}
-        />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
+      <div className="app-container">
+        <Routes>
+          <Route path="/" element={<HeroSection />} />
+          <Route path="/connexion" element={<LoginPage />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/tableau-de-bord" element={<Dashboard />} />
+            <Route path="/tableau-de-bord/unites-de-soins" element={<UnitesDeSoins />} />
+          </Route>
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
       </div>
     </Router>
   );

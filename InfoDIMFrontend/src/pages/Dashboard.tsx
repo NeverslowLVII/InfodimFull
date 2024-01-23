@@ -32,14 +32,15 @@ const Dashboard: React.FC = () => {
       <h1 className="text-lg font-bold mb-3 pl-16">Tableau de bord</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-64">
         {categories.map((category, index) => (
-          <div key={index} className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="aspect-w-1 aspect-h-1">
-              <img className="object-cover" src={category.IMAGEURL} alt={category.NAME} />
+          // TODO: Assurez-vous que l'URL est valide et sécurisée avant de l'utiliser comme lien
+          <a key={index} href={`/tableau-de-bord${category.URL}`} className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="aspect-w-1 aspect-h-1 w-full h-full">
+              <img className="object-cover object-center w-full h-full" src={category.IMAGEURL} alt={category.NAME} />
             </div>
             <div className="p-2">
               <h2 className="text-md font-semibold mb-1">{category.NAME}</h2>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>

@@ -5,6 +5,7 @@ import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { logout } from "../store/authSlice";
 import { useNavigate, NavLink } from "react-router-dom";
+import logoSvg from '../../public/images/infodim.svg';
 
 const navigation = [
   { name: "Accueil", href: "/" },
@@ -30,11 +31,11 @@ export function NavBar() {
   };
 
   return (
-    // Header component
-    <header className={`fixed bg-white inset-x-0 top-0 z-50`}>
+    // Header component with sticky positioning
+    <header className={`sticky top-0 bg-white inset-x-0 z-50`}>
       {/* Navigation bar */}
       <nav
-        className={`transition ease-in-out flex items-center justify-between p-6 md:px-8 shadow-lg`}
+        className={`transition ease-in-out flex items-center justify-between px-6 md:px-8 shadow-lg h-[12vh]`}
         aria-label="Global"
       >
         <div className="flex md:flex-1">
@@ -43,8 +44,8 @@ export function NavBar() {
             <span className="sr-only">InfoDIM</span>
             <img
               className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=600"
-              alt=""
+              src={logoSvg}
+              alt="Logo de InfoDIM"
             />
           </a>
         </div>
@@ -100,8 +101,9 @@ export function NavBar() {
               <span className="sr-only">InfoDIM</span>
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=blue&shade=600"
-                alt=""
+                src={logoSvg}
+                alt="Logo de InfoDIM"
+                style={{ color: 'theme(colors.blue.600)' }} // Use Tailwind's theme function to apply the color
               />
             </a>
             <button

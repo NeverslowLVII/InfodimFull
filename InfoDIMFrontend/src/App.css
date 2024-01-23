@@ -1,4 +1,14 @@
- width
+/* Hide scrollbar for the entire page */
+body {
+  overflow-y: hidden;
+}
+
+/* Enable scrollbar only for the main content */
+.app-container {
+  overflow-y: auto; /* or 'scroll' if you always want to display the scrollbar */
+  height: 88vh; /* or the desired height */
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
