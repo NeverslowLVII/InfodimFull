@@ -1,4 +1,8 @@
-docs
 InfoDIMBackend/node_modules
-InfoDIMFrontend/node_modules
-InfoDIMFrontend/src/assets
+InfoDIMFront/node_modules
+InfoDIMFront/src/assets
+*.html
+*.js
+*.css
+*.json
+*.md

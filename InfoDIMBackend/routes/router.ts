@@ -4,12 +4,16 @@ import StatusController from '../controllers/StatusController';
 import UserController from '../controllers/UserController';
 import RoleController from '../controllers/RoleController';
 import RouteController from '../controllers/RouteController';
+import AuthController from '../controllers/AuthController';
 
 // Création du routeur
 const routes = Router();
 
 // Routes pour le statut
 routes.get('/status', StatusController.status);
+
+// Routes pour l'authentification
+routes.post('/login', AuthController.login);
 
 // Routes pour les utilisateurs
 routes.post('/users', UserController.createUser);

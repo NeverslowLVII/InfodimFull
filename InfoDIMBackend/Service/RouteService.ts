@@ -40,7 +40,7 @@ export default class RouteService {
     }
     async updateRoute(id: number, updateData: any): Promise<any> {
         console.log('Mise à jour de l\'onglet', id, updateData);
-        const sql = `UPDATE ROUTES SET ROLES = :ROLES WHERE ID = :ID`;
+        const sql = `UPDATE ROUTES SET URL = :URL, NAME = :NAME, POSITION = :POSITION, VISIBLE = :VISIBLE WHERE ID = :ID`;
         const binds = { ID: id, ...updateData };
         try {
             await execute(sql, binds);

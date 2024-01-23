@@ -12,7 +12,7 @@ const validateRoutes = (req: Request, res: Response, next: NextFunction) => {
   const { error } = schema.validate(req.body);
   if (error) {
     console.error('Erreur de validation des onglets: ' + error.message);
-    return res.status(400).json({ message: error.message });
+    return res.json({ message: error.message });
   }
   console.log('Validation des onglets réussie');
   next();
@@ -25,7 +25,7 @@ export default {
   createRoute: errorHandler(async (req: Request, res: Response) => {
     validateRoutes(req, res, () => {});
     const route = await routeService.createRoute(req.body);
-    res.status(201).json({ message: 'Onglet créé avec succès', route: route });
+    res.json({ message: 'Onglet créé avec succès', route: route });
   }),
   getRoutes: errorHandler(async (req: Request, res: Response) => {
     const routes = await routeService.getRoutes();
@@ -34,18 +34,18 @@ export default {
   getRoute: errorHandler(async (req: Request, res: Response) => {
     const route = await routeService.getRoute(Number(req.params.id));
     if (!route) {
-      res.status(404).json({ message: 'Onglet non trouvé' });
+      res.json({ message: 'Onglet non trouvé' });
       return;
     }
-    res.json({ message: 'Onglet récupéré avec succès', route: route });
+    res.json({route});
   }),
   updateRoute: errorHandler(async (req: Request, res: Response) => {
     const route = await routeService.updateRoute(Number(req.params.id), req.body);
-    res.json({ message: 'Onglet mis à jour avec succès', route: route });
+    res.json({ route });
   }),
   deleteRoute: errorHandler(async (req: Request, res: Response) => {
     await routeService.deleteRoute(Number(req.params.id));
-    res.status(204).json({ message: 'Onglet supprimée avec succès' });
+    res.json({ message: 'Onglet supprimée avec succès' });
   }),
   updateRouteVisibility: errorHandler(async (req: Request, res: Response) => {
     const visibility = await routeService.updateRouteVisibility(Number(req.params.id), req.body.visible);

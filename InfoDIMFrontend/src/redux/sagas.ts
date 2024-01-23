@@ -1,8 +1,12 @@
-import { all } from "redux-saga/effects";
 
-import authSaga from "./auth/saga";
-import layoutSaga from "./layout/saga";
+import { all, fork } from 'redux-saga/effects';
+import watchLogin from '../store/loginSaga';
 
-export default function* rootSaga() {
-  yield all([authSaga(), layoutSaga()]);
+function* rootSaga() {
+  yield all([
+    fork(watchLogin),
+    // Add other sagas here
+  ]);
 }
+
+export default rootSaga;
