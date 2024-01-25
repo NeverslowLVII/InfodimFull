@@ -15,15 +15,15 @@ export function HeroSection() {
           }}
         />
       </div>
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-3xl">
         <div className="text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             Site d'information du
           </h1>
-          <h1 className="text-2xl font-bold tracking-tight text-blue-600 sm:text-6xl">
+          <h1 className="text-2xl font-bold tracking-tight text-blue-600 sm:text-5xl">
             Département de l'Information Médicale
           </h1>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             du Centre Hospitalier Spécialisé de SARREGUEMINES
           </h1>
           <div className="mt-10 flex items-center justify-center gap-x-6">
