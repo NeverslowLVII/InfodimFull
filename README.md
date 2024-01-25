@@ -42,11 +42,3 @@ Avant de démarrer les services, vous devez configurer les variables d'environne
    ```
    npm run dev
    ```
-
-## Contribution
-
-Pour contribuer au projet, veuillez suivre les directives de contribution spécifiées dans le fichier `CONTRIBUTING.md`.
-
-## Licence
-
-Ce projet est sous licence MIT. Pour plus de détails, consultez le fichier `LICENSE.md`.
