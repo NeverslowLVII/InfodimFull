@@ -39,8 +39,6 @@ class AuthController {
   
         const user = result.rows[0] as User;
         const passwordIsValid = await bcrypt.compare(password, user.PASSWORD);
-  
-        console.log('Vérification du mot de passe :', passwordIsValid);
         if (!passwordIsValid) {
           console.log('Mot de passe invalide');
           return res.json({ message: 'Invalid password' });
