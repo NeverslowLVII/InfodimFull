@@ -1,5 +1,6 @@
 // Importation des modules nécessaires
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import StatusController from '../controllers/StatusController';
 import UserController from '../controllers/UserController';
 import RoleController from '../controllers/RoleController';
@@ -9,10 +10,18 @@ import AuthController from '../controllers/AuthController';
 // Création du routeur
 const routes = Router();
 
+// Créez une instance de rateLimit avec les options souhaitées
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limite chaque IP à 100 requêtes par `window` (ici, par 15 minutes)
+  message: 'Trop de requêtes envoyées depuis cette IP, veuillez réessayer après un délai.'
+});
+
 // Routes pour le statut
 routes.get('/status', StatusController.status);
 
 // Routes pour l'authentification
+routes.use('/login', apiLimiter);
 routes.post('/login', AuthController.login);
 
 // Routes pour les utilisateurs
