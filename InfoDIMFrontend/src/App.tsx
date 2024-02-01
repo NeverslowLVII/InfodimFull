@@ -10,8 +10,7 @@ import Myosotis from "./pages/dashboard/Myosotis";
 import SCS from "./pages/dashboard/SCS";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import "./assets/main.css";
-import "./App.css";
+import "./index.css";
 
 const App: React.FC = () => {
   return (
@@ -23,7 +22,10 @@ const App: React.FC = () => {
           <Route path="/connexion" element={<LoginPage />} />
           <Route element={<PrivateRoute />}>
             <Route path="/tableau-de-bord" element={<Dashboard />} />
-            <Route path="/tableau-de-bord/unites-de-soins" element={<UnitesDeSoins />} />
+            <Route
+              path="/tableau-de-bord/unites-de-soins"
+              element={<UnitesDeSoins />}
+            />
             <Route path="/tableau-de-bord/myosotis" element={<Myosotis />} />
             <Route path="/tableau-de-bord/scs" element={<SCS />} />
           </Route>
