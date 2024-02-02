@@ -135,7 +135,11 @@ const DataTable: React.FC<DataTableProps> = ({
     autoTable(doc, {
       head: [columns.map((col) => col.header)],
       body: currentItems.map((row) =>
-        columns.map((col) => row[col.accessor].toString())
+        columns.map((col) => {
+          // Check if the property is defined, otherwise return an empty string
+          const cellValue = row[col.accessor];
+          return cellValue !== undefined ? cellValue.toString() : '';
+        })
       ),
     });
     doc.save("data_export.pdf");
@@ -147,7 +151,10 @@ const DataTable: React.FC<DataTableProps> = ({
         {/* Export Buttons */}
         {enableExport && (
           <div className="mb-4">
-            <button onClick={exportToPDF} className="px-4 py-2 border rounded-md">
+            <button
+              onClick={exportToPDF}
+              className="px-4 py-2 border rounded-md"
+            >
               Exporter en PDF
             </button>
           </div>
@@ -204,16 +211,18 @@ const DataTable: React.FC<DataTableProps> = ({
                         className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer text-center"
                         onClick={() => handleSort(column.accessor)}
                       >
-                        {column.header}
-                        {sortColumn === column.accessor && (
-                          <span className="ml-2">
-                            {sortDirection === "asc" ? (
-                              <FaAngleDown aria-hidden="true" />
-                            ) : (
-                              <FaAngleUp aria-hidden="true" />
-                            )}
-                          </span>
-                        )}
+                        <div className="flex items-center justify-center">
+                          {column.header}
+                          {sortColumn === column.accessor && (
+                            <span className="ml-2">
+                              {sortDirection === "asc" ? (
+                                <FaAngleDown aria-hidden="true" />
+                              ) : (
+                                <FaAngleUp aria-hidden="true" />
+                              )}
+                            </span>
+                          )}
+                        </div>
                       </th>
                     ))}
                 </tr>
@@ -221,13 +230,15 @@ const DataTable: React.FC<DataTableProps> = ({
               <tbody className="bg-white divide-y divide-gray-200">
                 {currentItems.map((row, rowIndex) => (
                   <tr key={rowIndex}>
-                    <td className="text-center">
-                      <input
-                        type="checkbox"
-                        checked={selectedRows.includes(rowIndex)}
-                        onChange={() => handleRowSelect(rowIndex)}
-                      />
-                    </td>
+                    {enableRowSelection && (
+                      <td className="text-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedRows.includes(rowIndex)}
+                          onChange={() => handleRowSelect(rowIndex)}
+                        />
+                      </td>
+                    )}
                     {columns
                       .filter((column) =>
                         visibleColumns.includes(column.accessor)
@@ -235,7 +246,7 @@ const DataTable: React.FC<DataTableProps> = ({
                       .map((column, colIndex) => (
                         <td
                           key={colIndex}
-                          className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"
+                          className={`px-6 py-4 whitespace-nowrap text-sm text-gray-500 ${enableRowSelection ? "text-center" : ""}`}
                         >
                           {row[column.accessor]}
                         </td>

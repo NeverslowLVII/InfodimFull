@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
 import { HeroSection } from "./components/HeroSection";
 import LoginPage from "./pages/LoginPage";
@@ -12,10 +12,13 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import "./index.css";
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const location = useLocation();
+  const showNavBar = location.pathname !== "/connexion";
+
   return (
-    <Router>
-      <NavBar />
+    <>
+      {showNavBar && <NavBar />}
       <div className="app-container">
         <Routes>
           <Route path="/" element={<HeroSection />} />
@@ -33,6 +36,14 @@ const App: React.FC = () => {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </div>
+    </>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 };

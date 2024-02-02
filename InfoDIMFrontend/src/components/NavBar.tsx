@@ -1,4 +1,4 @@
-// NavBar.tsx
+
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Dialog } from "@headlessui/react";
@@ -31,7 +31,7 @@ export function NavBar() {
   };
 
   return (
-    // Header component with sticky positioning
+    
     <header className={`sticky top-0 bg-white inset-x-0 z-50`}>
       {/* Navigation bar */}
       <nav
@@ -67,8 +67,8 @@ export function NavBar() {
               key={item.name}
               to={item.href}
               className={({ isActive }) => 
-                "text-sm font-semibold leading-6 text-gray-900" + (isActive ? " text-blue-600" : "")
-              }
+  "text-sm font-medium leading-6 transition duration-300 ease-in-out" + (isActive ? " text-blue-600" : " text-gray-900 hover:text-blue-600")
+}
             >
               {item.name}
             </NavLink>
@@ -103,7 +103,7 @@ export function NavBar() {
                 className="h-8 w-auto"
                 src={logoSvg}
                 alt="Logo de InfoDIM"
-                style={{ color: 'theme(colors.blue.600)' }} // Use Tailwind's theme function to apply the color
+                style={{ color: 'theme(colors.blue.600)' }}
               />
             </a>
             <button
@@ -136,7 +136,7 @@ export function NavBar() {
                   onClick={
                     isAuthenticated ? (event) => handleLogout(event) : undefined
                   }
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 transition duration-300 ease-in-out"
                 >
                   {isAuthenticated ? "Se déconnecter" : "Se connecter"}
                 </a>

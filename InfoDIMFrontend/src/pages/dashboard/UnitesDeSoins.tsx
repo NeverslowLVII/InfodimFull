@@ -1,5 +1,4 @@
 import React from "react";
-import { FaBed, FaCircleCheck, FaShield, FaBan, FaPen } from "react-icons/fa6";
 import DataTable from "../../components/DataTable";
 
 const UnitesDeSoins = () => {
@@ -33,10 +32,10 @@ const UnitesDeSoins = () => {
     <div className="px-4 sm:px-6 lg:px-8 pt-8 lg:mx-32 md:mx-8 font-sans">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold leading-6 text-gray-900 font-title">
+          <h1 className="text-2xl font-semibold leading-6 text-gray-900 font-title">
             Unités de Soins
           </h1>
-          <p className="mt-2 text-sm text-gray-700">
+          <p className="mt-2 text-md text-gray-700 font-sans">
             tableau des lits par unité de soins avec leur disponibilité.
           </p>
         </div>
