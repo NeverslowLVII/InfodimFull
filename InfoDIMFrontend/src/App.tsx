@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
 import { HeroSection } from "./components/HeroSection";
@@ -11,6 +11,7 @@ import SCS from "./pages/dashboard/SCS";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import "./index.css";
+import "./darkmode.css"
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -41,6 +42,15 @@ const AppContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  useEffect(() => {
+    const darkModeEnabled = localStorage.getItem('darkMode') === 'true';
+    if (darkModeEnabled) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, []);
+
   return (
     <Router>
       <AppContent />

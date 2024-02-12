@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 
-// Définir l'interface Category
 interface Category {
   ID: number;
   URL: string;
@@ -10,11 +9,9 @@ interface Category {
   POSITION: number;
   VISIBLE: string;
   IMAGEURL: string;
-  
 }
 
 const Dashboard: React.FC = () => {
-  // Utiliser l'interface Category pour l'état
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
@@ -28,8 +25,8 @@ const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative isolate px-2 py-6 lg:px-4">
-      <h1 className="text-lg font-bold mb-3 pl-16">Tableau de bord</h1>
+    <div className="relative isolate px-2 py-6 lg:px-4 dark:bg-gray-800">
+      <h1 className="text-lg font-bold mb-3 pl-16 dark:text-gray-200">Tableau de bord</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-64">
         {categories.map((category, index) => {
           const cleanURL = DOMPurify.sanitize(`/tableau-de-bord${category.URL}`);
@@ -37,12 +34,12 @@ const Dashboard: React.FC = () => {
           const cleanImageURL = DOMPurify.sanitize(`${baseUrl}/${category.IMAGEURL}`);
 
           return (
-            <a key={index} href={cleanURL} className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="aspect-w-1 aspect-h-1 ">
+            <a key={index} href={cleanURL} className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden dark:bg-gray-700">
+              <div className="aspect-w-1 aspect-h-1">
                 <img className="object-cover object-center w-full h-full" src={cleanImageURL} alt={category.NAME} />
               </div>
               <div className="p-2">
-                <h2 className="text-md font-semibold mb-1">{category.NAME}</h2>
+                <h2 className="text-md font-semibold mb-1 dark:text-gray-300">{category.NAME}</h2>
               </div>
             </a>
           );

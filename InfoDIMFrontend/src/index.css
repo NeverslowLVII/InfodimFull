@@ -33,3 +33,22 @@ body {
   .p {
     font-family: 'playfair display', serif;
   }
+
+  body.dark {
+    background-color: #333;
+    color: white;
+  }
+  body.dark a {
+    color: #aaa;
+  }
+
+  .svg-elem-1 {
+    stroke-dashoffset: 2524.626708984375px;
+    stroke-dasharray: 2524.626708984375px;
+    fill: transparent;
+    transition: stroke-dashoffset 1s ease-out 0s, fill 1.7s ease-in-out 1s;
+  }
+  svg.active .svg-elem-1 {
+    stroke-dashoffset: 0;
+    fill: rgb(59, 130, 246);
+  }

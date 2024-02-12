@@ -42,19 +42,18 @@ const DataTable: React.FC<DataTableProps> = ({
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
 
-  // Simulate data loading
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false); // Data loaded
+      setIsLoading(false);
       if (data.length === 0) {
         setIsEmpty(true);
       }
-    }, 2000); // Simulate a fetch call
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
   const handleSort = (column: string) => {
-    if (!enableSorting) return; // Don't do anything if sorting is not enabled
+    if (!enableSorting) return;
     if (sortColumn === column) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
@@ -64,7 +63,7 @@ const DataTable: React.FC<DataTableProps> = ({
   };
 
   const handleRowSelect = (rowIndex: number) => {
-    if (!enableRowSelection) return; // Don't do anything if row selection is not enabled
+    if (!enableRowSelection) return;
     if (selectedRows.includes(rowIndex)) {
       setSelectedRows(selectedRows.filter((index) => index !== rowIndex));
     } else {
@@ -73,7 +72,7 @@ const DataTable: React.FC<DataTableProps> = ({
   };
 
   const handleColumnVisibility = (column: string) => {
-    if (!enableColumnVisibility) return; // Don't do anything if column visibility is not enabled
+    if (!enableColumnVisibility) return;
     if (visibleColumns.includes(column)) {
       setVisibleColumns(visibleColumns.filter((col) => col !== column));
     } else {
@@ -81,14 +80,21 @@ const DataTable: React.FC<DataTableProps> = ({
     }
   };
 
+  const handleItemsPerPageChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setItemsPerPage(Number(event.target.value));
+    setCurrentPage(1); // Reset to first page to avoid pagination errors
+  };
+
   const sortedData = data
     .filter((row) => {
       for (let column of columns) {
+        const cellValue = row[column.accessor];
         if (
-          row[column.accessor]
-            .toString()
-            .toLowerCase()
-            .includes(searchValue.toLowerCase())
+          cellValue !== undefined &&
+          cellValue !== null &&
+          cellValue.toString().toLowerCase().includes(searchValue.toLowerCase())
         ) {
           return true;
         }
@@ -130,48 +136,63 @@ const DataTable: React.FC<DataTableProps> = ({
   };
 
   const exportToPDF = () => {
-    if (!enableExport) return; // Don't do anything if export is not enabled
+    if (!enableExport) return;
     const doc = new jsPDF();
     autoTable(doc, {
       head: [columns.map((col) => col.header)],
       body: currentItems.map((row) =>
         columns.map((col) => {
-          // Check if the property is defined, otherwise return an empty string
           const cellValue = row[col.accessor];
-          return cellValue !== undefined ? cellValue.toString() : '';
+          return cellValue !== undefined ? cellValue.toString() : "";
         })
       ),
     });
-    doc.save("data_export.pdf");
+    doc.save("exportation_donnees.pdf");
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto dark:bg-gray-800">
       <div className="align-middle inline-block min-w-full">
-        {/* Export Buttons */}
-        {enableExport && (
-          <div className="mb-4">
-            <button
-              onClick={exportToPDF}
-              className="px-4 py-2 border rounded-md"
-            >
-              Exporter en PDF
-            </button>
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
+          <div className="md:col-span-2">
+            {enableSearch && (
+              <input
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="Rechercher..."
+                className="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-transparent dark:focus:outline-none"
+              />
+            )}
           </div>
-        )}
-        {/* Search Input */}
-        {enableSearch && (
-          <div className="mb-4">
-            <input
-              type="text"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="Search..."
-              className="px-4 py-2 border rounded-md"
-            />
+          <div className="md:col-span-4 flex justify-end space-x-2">
+            <div>
+              {enableExport && (
+                <button
+                  onClick={exportToPDF}
+                  className="px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-transparent"
+                >
+                  Exporter en PDF
+                </button>
+              )}
+            </div>
+            <div>
+              {enablePagination && (
+                <select
+                  value={itemsPerPage}
+                  onChange={handleItemsPerPageChange}
+                  className="px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-transparent dark:focus:outline-none"
+                >
+                  <option value="1">1</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                </select>
+              )}
+            </div>
           </div>
-        )}
-        {/* Column Visibility */}
+        </div>
         {enableColumnVisibility && (
           <div className="mb-4">
             {columns.map((column, index) => (
@@ -180,26 +201,25 @@ const DataTable: React.FC<DataTableProps> = ({
                   type="checkbox"
                   checked={visibleColumns.includes(column.accessor)}
                   onChange={() => handleColumnVisibility(column.accessor)}
-                  className="form-checkbox h-5 w-5 text-gray-600"
+                  className="form-checkbox h-5 w-5 text-gray-600 dark:border-gray-700 dark:bg-gray-700"
                 />
-                <span className="ml-2 text-gray-700">{column.header}</span>
+                <span className="ml-2 text-gray-700 dark:text-gray-300">{column.header}</span>
               </label>
             ))}
           </div>
         )}
-        {/* Loading Indicator */}
         {isLoading ? (
-          <div>Loading...</div>
+          <div>Chargement...</div>
         ) : isEmpty ? (
-          <div>No data available.</div>
+          <div>Aucune donnée disponible.</div>
         ) : hasError ? (
-          <div>Error loading data.</div>
+          <div>Erreur lors du chargement des données.</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                  <th></th>
+                  {enableRowSelection && <th></th>}
                   {columns
                     .filter((column) =>
                       visibleColumns.includes(column.accessor)
@@ -208,7 +228,7 @@ const DataTable: React.FC<DataTableProps> = ({
                       <th
                         key={index}
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer text-center"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer text-center dark:text-white"
                         onClick={() => handleSort(column.accessor)}
                       >
                         <div className="flex items-center justify-center">
@@ -227,15 +247,16 @@ const DataTable: React.FC<DataTableProps> = ({
                     ))}
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
                 {currentItems.map((row, rowIndex) => (
                   <tr key={rowIndex}>
                     {enableRowSelection && (
-                      <td className="text-center">
+                      <td className="text-center dark:text-white">
                         <input
                           type="checkbox"
                           checked={selectedRows.includes(rowIndex)}
                           onChange={() => handleRowSelect(rowIndex)}
+                          className="dark:bg-gray-700 dark:border-gray-600"
                         />
                       </td>
                     )}
@@ -246,7 +267,9 @@ const DataTable: React.FC<DataTableProps> = ({
                       .map((column, colIndex) => (
                         <td
                           key={colIndex}
-                          className={`px-6 py-4 whitespace-nowrap text-sm text-gray-500 ${enableRowSelection ? "text-center" : ""}`}
+                          className={`px-6 py-4 whitespace-nowrap text-sm dark:text-white ${
+                            enableRowSelection ? "text-center" : ""
+                          }`}
                         >
                           {row[column.accessor]}
                         </td>
@@ -257,21 +280,20 @@ const DataTable: React.FC<DataTableProps> = ({
             </table>
           </div>
         )}
-        {/* Pagination */}
         {enablePagination && (
-          <div className="flex justify-between p-4">
+          <div className="flex justify-between p-4 dark:bg-gray-800">
             <button
-              className="px-4 py-2 bg-gray-300 rounded-md disabled:opacity-50"
+              className="px-4 py-2 bg-gray-300 rounded-md disabled:opacity-50 dark:bg-gray-700 dark:text-white"
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
             >
               Précédent
             </button>
-            <span>
+            <span className="dark:text-white">
               Page {currentPage} sur {totalPages}
             </span>
             <button
-              className="px-4 py-2 bg-gray-300 rounded-md disabled:opacity-50"
+              className="px-4 py-2 bg-gray-300 rounded-md disabled:opacity-50 dark:bg-gray-700 dark:text-white"
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
             >

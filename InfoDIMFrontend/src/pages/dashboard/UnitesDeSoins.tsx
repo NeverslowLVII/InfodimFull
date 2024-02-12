@@ -32,10 +32,10 @@ const UnitesDeSoins = () => {
     <div className="px-4 sm:px-6 lg:px-8 pt-8 lg:mx-32 md:mx-8 font-sans">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-2xl font-semibold leading-6 text-gray-900 font-title">
+          <h1 className="text-2xl font-semibold leading-6 text-gray-900 dark:text-gray-200 font-title">
             Unités de Soins
           </h1>
-          <p className="mt-2 text-md text-gray-700 font-sans">
+          <p className="mt-2 text-md text-gray-700 dark:text-gray-300 font-sans">
             tableau des lits par unité de soins avec leur disponibilité.
           </p>
         </div>
@@ -46,7 +46,7 @@ const UnitesDeSoins = () => {
           data={transformedData} 
           enableSorting={true}
           enablePagination={true}
-          enableSearch={false}
+          enableSearch={true}
           enableRowSelection={false}
           enableColumnVisibility={false}
           enableExport={true}
