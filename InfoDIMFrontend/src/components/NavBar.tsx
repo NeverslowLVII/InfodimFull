@@ -6,6 +6,7 @@ import { logout } from "../store/authSlice";
 import { useNavigate, NavLink } from "react-router-dom";
 import InfoDimLogo from './InfoDimLogo';
 import { toggleDarkMode } from '../store/darkModeSlice';
+import { setThemeColor } from '../store/themeSlice'; // Added this import
 
 const navigation = [
   { name: "Accueil", href: "/" },
@@ -23,9 +24,9 @@ export function NavBar() {
   const isDarkMode = useSelector((state) => state.darkMode.isEnabled);
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
+  const themeColor = useSelector((state: any) => state.theme.themeColor);
 
   useEffect(() => {
-    // Set isActive to true to start the animation when the component mounts
     setIsActive(true);
   }, []);
 
@@ -41,21 +42,17 @@ export function NavBar() {
   };
 
   return (
-    
     <header className={`sticky top-0 bg-white/75 dark:bg-gray-800/75 inset-x-0 z-50 backdrop-blur-lg`}>
-      {/* Barre de navigation */}
       <nav
         className={`transition ease-in-out flex items-center justify-between px-6 md:px-8 shadow-lg h-[12vh] dark:text-white`}
         aria-label="Global"
       >
         <div className="flex md:flex-1">
-          {/* Lien du logo */}
           <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">InfoDIM</span>
-            <InfoDimLogo isActive={isActive} /> {/* Changed this line to use the SVG as a React component */}
+            <InfoDimLogo isActive={isActive} />
           </a>
         </div>
-        {/* Bouton du menu mobile */}
         <div className="flex md:hidden">
           <button
             type="button"
@@ -66,21 +63,47 @@ export function NavBar() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        {/* Liens de navigation pour le bureau */}
+        <div className="md:col-span-1">
+          <select
+            value={themeColor}
+            onChange={(e) => {
+              const newColor = e.target.value;
+              setThemeColor(newColor); // Dispatch the action to update the theme color in the store
+              dispatch(setThemeColor(newColor));
+            }}
+            className={`px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-white dark:border-transparent`}
+          >
+            <option value="red">Red</option>
+            <option value="orange">Orange</option>
+            <option value="amber">Amber</option>
+            <option value="yellow">Yellow</option>
+            <option value="lime">Lime</option>
+            <option value="green">Green</option>
+            <option value="emerald">Emerald</option>
+            <option value="teal">Teal</option>
+            <option value="cyan">Cyan</option>
+            <option value="sky">Sky</option>
+            <option value="blue">Blue</option>
+            <option value="indigo">Indigo</option>
+            <option value="violet">Violet</option>
+            <option value="purple">Purple</option>
+            <option value="fuchsia">Fuchsia</option>
+            <option value="pink">Pink</option>
+            <option value="rose">Rose</option>
+          </select>
+        </div>
         <div className="hidden md:flex md:gap-x-12">
           {navigation.map((item) => (
             <NavLink
               key={item.name}
               to={item.href}
               className={({ isActive }) => 
-  "text-sm font-medium leading-6 transition duration-300 ease-in-out" + (isActive ? " text-blue-600 dark:text-blue-400" : " text-gray-900 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400")
-}
+  `text-sm font-medium leading-6 transition duration-300 ease-in-out ${isActive ? `text-${themeColor}-600 dark:text-${themeColor}-600` : `text-gray-900 dark:text-gray-200 hover:text-${themeColor}-600 dark:hover:text-${themeColor}-400`}`}
             >
               {item.name}
             </NavLink>
           ))}
         </div>
-        {/* Lien de connexion/déconnexion */}
         <div className="hidden md:flex md:flex-1 md:justify-end">
         <button onClick={handleToggleDarkMode} className="px-4 rounded-full text-gray-700 dark:text-gray-200">
           {isDarkMode ? (
@@ -101,7 +124,6 @@ export function NavBar() {
           </a>
         </div>
       </nav>
-      {/* Dialogue du menu mobile */}
       <Dialog
         as="div"
         className="md:hidden"
@@ -138,8 +160,7 @@ export function NavBar() {
                     key={item.name}
                     to={item.href}
                     className={({ isActive }) => 
-                      "-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700" + (isActive ? " bg-gray-200 dark:bg-gray-600" : "")
-                    }
+                      `-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 ${isActive ? "bg-gray-200 dark:bg-gray-600" : ""}`}
                   >
                     {item.name}
                   </NavLink>

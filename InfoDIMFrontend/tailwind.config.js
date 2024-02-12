@@ -46,4 +46,23 @@ export default {
       addUtilities(newUtilities, ['responsive', 'hover']);
     },
   ],
+  safelist: (() => {
+    const colors = ['red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose']; 
+    const shades = ['50','100', '200', '300', '400', '500', '600', '700', '800', '900','950'];
+    const safelist = [];
+
+    colors.forEach(color => {
+      shades.forEach(shade => {
+        safelist.push(`text-${color}-${shade}`);
+        safelist.push(`bg-${color}-${shade}`);
+        safelist.push(`border-${color}-${shade}`);
+        safelist.push(`hover:text-${color}-${shade}`);
+        safelist.push(`hover:bg-${color}-${shade}`);
+        safelist.push(`hover:border-${color}-${shade}`);
+        // Add other utilities as needed
+      });
+    });
+
+    return safelist;
+  })(),
 };
