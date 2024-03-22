@@ -1,5 +1,4 @@
 import { execute } from '../oracleDB';
-
 export default class RoleService {
     async createRole(roleData: any): Promise<any> {
         console.log('Création d\'un rôle', roleData);

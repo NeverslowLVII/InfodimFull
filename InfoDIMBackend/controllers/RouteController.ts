@@ -11,8 +11,8 @@ const validateRoutes = (req: Request, res: Response, next: NextFunction) => {
   });
   const { error } = schema.validate(req.body);
   if (error) {
-    console.error('Erreur de validation des onglets: ' + error.message);
-    return res.json({ message: error.message });
+    console.error('Erreur de validation des onglets');
+    return next(error); // Changed to pass errors to Express's error handling middleware without logging the error message
   }
   console.log('Validation des onglets réussie');
   next();
@@ -22,33 +22,56 @@ const errorHandler = (fn: Function) => (req: Request, res: Response, next: NextF
   fn(req, res, next).catch(next);
 
 export default {
-  createRoute: errorHandler(async (req: Request, res: Response) => {
-    validateRoutes(req, res, () => {});
-    const route = await routeService.createRoute(req.body);
-    res.json({ message: 'Onglet créé avec succès', route: route });
-  }),
-  getRoutes: errorHandler(async (req: Request, res: Response) => {
-    const routes = await routeService.getRoutes();
-    res.json(routes);
-  }),
-  getRoute: errorHandler(async (req: Request, res: Response) => {
-    const route = await routeService.getRoute(Number(req.params.id));
-    if (!route) {
-      res.json({ message: 'Onglet non trouvé' });
-      return;
+  createRoute: errorHandler(async (req: Request, res: Response, next: NextFunction) => { // Added next: NextFunction
+    try {
+      validateRoutes(req, res, next); // Modified to include next
+      const route = await routeService.createRoute(req.body);
+      res.json({ message: 'Onglet créé avec succès', route: route });
+    } catch (error) {
+      next(error); // Added to pass errors to Express's error handling middleware
     }
-    res.json({route});
   }),
-  updateRoute: errorHandler(async (req: Request, res: Response) => {
-    const route = await routeService.updateRoute(Number(req.params.id), req.body);
-    res.json({ route });
+  getRoutes: errorHandler(async (req: Request, res: Response, next: NextFunction) => { // Added next: NextFunction
+    try {
+      const routes = await routeService.getRoutes();
+      res.json(routes);
+    } catch (error) {
+      next(error); // Added to pass errors to Express's error handling middleware
+    }
   }),
-  deleteRoute: errorHandler(async (req: Request, res: Response) => {
-    await routeService.deleteRoute(Number(req.params.id));
-    res.json({ message: 'Onglet supprimée avec succès' });
+  getRoute: errorHandler(async (req: Request, res: Response, next: NextFunction) => { // Added next: NextFunction
+    try {
+      const route = await routeService.getRoute(Number(req.params.id));
+      if (!route) {
+        return res.json({ message: 'Onglet non trouvé' });
+      }
+      res.json({route});
+    } catch (error) {
+      next(error); // Added to pass errors to Express's error handling middleware
+    }
   }),
-  updateRouteVisibility: errorHandler(async (req: Request, res: Response) => {
-    const visibility = await routeService.updateRouteVisibility(Number(req.params.id), req.body.visible);
-    res.json({ message: 'visibilité de l\'onglet mise à jour avec succès', visibility: visibility });
+  updateRoute: errorHandler(async (req: Request, res: Response, next: NextFunction) => { // Added next: NextFunction
+    try {
+      const route = await routeService.updateRoute(Number(req.params.id), req.body);
+      res.json({ route });
+    } catch (error) {
+      next(error); // Added to pass errors to Express's error handling middleware
+    }
+  }),
+  deleteRoute: errorHandler(async (req: Request, res: Response, next: NextFunction) => { // Added next: NextFunction
+    try {
+      await routeService.deleteRoute(Number(req.params.id));
+      res.json({ message: 'Onglet supprimée avec succès' });
+    } catch (error) {
+      next(error); // Added to pass errors to Express's error handling middleware
+    }
+  }),
+  updateRouteVisibility: errorHandler(async (req: Request, res: Response, next: NextFunction) => { // Added next: NextFunction
+    try {
+      const visibility = await routeService.updateRouteVisibility(Number(req.params.id), req.body.visible);
+      res.json({ message: 'visibilité de l\'onglet mise à jour avec succès', visibility: visibility });
+    } catch (error) {
+      next(error); // Added to pass errors to Express's error handling middleware
+    }
   })
 };

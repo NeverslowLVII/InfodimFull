@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import oracledb from 'oracledb';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -12,7 +12,7 @@ interface User {
   }
   
 class AuthController {
-    async login(req: Request, res: Response) {
+    async login(req: Request, res: Response, next: NextFunction) {
       const { username, password } = req.body;
   
       try {
@@ -31,7 +31,6 @@ class AuthController {
           { outFormat: oracledb.OUT_FORMAT_OBJECT }
         );
   
-        console.log('Vérification des données :', result.rows);
         if (result.rows?.length === 0) {
           console.log('Nom d\'utilisateur invalide');
           return res.json({ message: 'Invalid username' });
@@ -40,7 +39,7 @@ class AuthController {
         const user = result.rows[0] as User;
         const passwordIsValid = await bcrypt.compare(password, user.PASSWORD);
         if (!passwordIsValid) {
-          console.log('Mot de passe invalide');
+          console.log('Échec de la validation du mot de passe');
           return res.json({ message: 'Invalid password' });
         }
   
@@ -50,11 +49,10 @@ class AuthController {
         });
   
         console.log('Connexion réussie');
-        console.log('Token:', token);
         res.json({ auth: true, token, success: true });
       } catch (error) {
         console.error('Erreur interne du serveur', error);
-        res.json({ message: 'Internal server error' });
+        next(error); // Pass errors to Express's error handling middleware
       }
     }
   }
